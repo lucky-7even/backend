@@ -7,8 +7,8 @@ spring:
       matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://luckyseven.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
-    username: admin
+    url: jdbc:mysql://awseb-e-w6zdpnq2at-stack-awsebrdsdatabase-towghvcyhym7.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
+    username: luckysevenDB
     password: rejin0421
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
