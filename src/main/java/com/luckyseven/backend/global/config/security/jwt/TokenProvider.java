@@ -73,7 +73,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // Token을 이용한 Authentication 객체 리턴
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(HttpServletRequest request, String token) {
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -113,7 +113,7 @@ public class TokenProvider implements InitializingBean {
      * @param token 검사하려는 JWT 토큰
      * @returns boolean
      * */
-    public boolean validateToken(ServletRequest request, String token) {
+    public boolean validateToken(HttpServletRequest request, String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
