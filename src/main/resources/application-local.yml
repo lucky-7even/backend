@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:8000/luckyseven
+    username: jimin
+    password: simon1126
+
+  jpa:
+    hibernate:
+      ddl-auto: update
