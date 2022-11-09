@@ -1,11 +1,25 @@
 package com.luckyseven.backend.domain.member;
 
+import com.luckyseven.backend.domain.member.dto.LoginDto;
 import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.domain.member.entity.Member;
+import com.luckyseven.backend.global.config.CommonApiResponse;
+import com.luckyseven.backend.global.config.redis.RedisService;
+import com.luckyseven.backend.global.config.security.dto.RefreshTokenDto;
+import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
+import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
 import com.luckyseven.backend.global.error.ErrorCode;
 import com.luckyseven.backend.global.error.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +30,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
 
     // 일반 회원가입
     @Transactional
@@ -28,11 +46,54 @@ public class MemberService {
             throw new BadRequestException(ErrorCode.PASSWORD_CONFIRM_NOT_VALID);
         }
 
-        Member member = memberRequestDto.toMember(memberRequestDto);
+        Member member = Member.builder()
+                .nickname(memberRequestDto.getNickname())
+                .email(memberRequestDto.getEmail())
+                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
+                .build();
         memberRepository.save(member);
 
         return MemberResponseDto.of(member);
     }
     
     // 일반 로그인
+    @Transactional
+    public ResponseEntity<CommonApiResponse<MemberResponseDto>> loginMember(LoginDto loginDto) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        TokenResponseDto tokenResponseDTO = tokenProvider.generateToken(authentication.getName());
+
+        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
+        httpHeaders.add("Authorization", "Bearer " + tokenResponseDTO.getAccessToken());
+
+        return new ResponseEntity<>(CommonApiResponse.of(MemberResponseDto.of(member, tokenResponseDTO)), httpHeaders, HttpStatus.OK);
+    }
+
+    // 토큰 재발급
+    @Transactional
+    public ResponseEntity<CommonApiResponse<TokenResponseDto>> refreshMember(String email, RefreshTokenDto refreshTokenDto) {
+        // Refresh Token 검증
+        if (!tokenProvider.validateRefreshToken(email, refreshTokenDto.getRefreshToken())) {
+            throw new BadRequestException(ErrorCode.EXPIRED_TOKEN);
+        }
+
+        // Redis에서 저장된 Refresh Token 값을 가져온다.
+        String refreshToken = redisService.getValues(email);
+
+        if(!refreshToken.equals(refreshTokenDto.getRefreshToken())) {
+            throw new BadRequestException(ErrorCode.MISMATCH_REFRESH_TOKEN);
+        }
+
+        // 토큰 재발행
+        TokenResponseDto tokenResponseDto = tokenProvider.generateToken(email);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        return new ResponseEntity<>(CommonApiResponse.of(tokenResponseDto), httpHeaders, HttpStatus.OK);
+    }
 }
