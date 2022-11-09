@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String jwt = resolveToken(request); //request에서 jwt 토큰을 꺼낸다.
 
                 if (jwt == null) {
-                    log.error("jwt 값을 가져올 수 없습니다");
+                    // log.error("jwt 값을 가져올 수 없습니다");
                     request.setAttribute("exception", ErrorCode.NO_TOKEN.getCode());
                     filterChain.doFilter(request, response);
                     return;
