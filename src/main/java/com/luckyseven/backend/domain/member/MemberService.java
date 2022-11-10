@@ -6,7 +6,7 @@ import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.CommonApiResponse;
 import com.luckyseven.backend.global.config.redis.RedisService;
-import com.luckyseven.backend.global.config.security.dto.RefreshTokenDto;
+import com.luckyseven.backend.global.config.security.dto.TokenRequestDto;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
 import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
 import com.luckyseven.backend.global.error.ErrorCode;
@@ -76,20 +76,21 @@ public class MemberService {
 
     // 토큰 재발급
     @Transactional
-    public ResponseEntity<CommonApiResponse<TokenResponseDto>> refreshMember(String email, RefreshTokenDto refreshTokenDto) {
-        // Refresh Token 검증
-        if (!tokenProvider.validateRefreshToken(email, refreshTokenDto.getRefreshToken())) {
-            throw new BadRequestException(ErrorCode.EXPIRED_TOKEN);
+    public ResponseEntity<CommonApiResponse<TokenResponseDto>> refreshMember(TokenRequestDto tokenRequestDto) {
+        String email;
+
+        if (!tokenProvider.validateTokenExceptExpiration(tokenRequestDto.getAccessToken())){
+            throw new BadRequestException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
-        // Redis에서 저장된 Refresh Token 값을 가져온다.
-        String refreshToken = redisService.getValues(email);
-
-        if(!refreshToken.equals(refreshTokenDto.getRefreshToken())) {
-            throw new BadRequestException(ErrorCode.MISMATCH_REFRESH_TOKEN);
+        try {
+            email = tokenProvider.parseClaims(tokenRequestDto.getAccessToken()).getSubject();
+        } catch (Exception e) {
+            throw new BadRequestException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        // 토큰 재발행
+        tokenProvider.validateRefreshToken(email, tokenRequestDto.getRefreshToken());
+
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(email);
 
         HttpHeaders httpHeaders = new HttpHeaders();

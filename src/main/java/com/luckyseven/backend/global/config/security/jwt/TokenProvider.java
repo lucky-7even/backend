@@ -177,4 +177,37 @@ public class TokenProvider implements InitializingBean {
         }
         return true;
     }
+
+    /**
+     * 토큰 예외 중 만료 상황만 검증 함수
+     * @param token 검사하려는 JWT 토큰
+     * @returns boolean
+     * */
+    public boolean validateTokenExceptExpiration(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch(ExpiredJwtException e) {
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * JWT 토큰에서 claims 추출
+     * @param accessToken 추출하고 싶은 AccessToken (JWT)
+     * @return Claims
+     */
+    public Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
 }
