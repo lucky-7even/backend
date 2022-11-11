@@ -5,7 +5,6 @@ import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.CommonApiResponse;
-import com.luckyseven.backend.global.config.redis.RedisService;
 import com.luckyseven.backend.global.config.security.dto.TokenRequestDto;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
 import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
@@ -33,7 +32,6 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
-    private final RedisService redisService;
 
     // 일반 회원가입
     @Transactional
@@ -59,6 +57,11 @@ public class MemberService {
     // 일반 로그인
     @Transactional
     public ResponseEntity<CommonApiResponse<MemberResponseDto>> loginMember(LoginDto loginDto) {
+        Optional<Member> checkMember = memberRepository.findByEmail(loginDto.getEmail());
+        if (checkMember.isEmpty()) {
+            throw new BadRequestException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 

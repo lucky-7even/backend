@@ -1,5 +1,6 @@
 package com.luckyseven.backend.global.config.security;
 
+import com.luckyseven.backend.domain.member.OAuthService;
 import com.luckyseven.backend.global.config.security.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,6 @@ public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
