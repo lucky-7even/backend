@@ -33,4 +33,7 @@ public class Member {
 
     // 위도
     private Double lng;
+
+    // 소셜 회원가입여부
+    private boolean isSocial;
 }

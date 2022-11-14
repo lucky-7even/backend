@@ -4,16 +4,12 @@ import com.luckyseven.backend.domain.member.dto.LoginDto;
 import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.global.config.CommonApiResponse;
-import com.luckyseven.backend.global.config.security.dto.TokenRequestDto;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -40,8 +36,9 @@ public class MemberApiController {
     
     @PostMapping("reissue")
     @ApiOperation(value = "토큰 재발급")
-    public ResponseEntity<CommonApiResponse<TokenResponseDto>> refreshToken(
-            @RequestBody TokenRequestDto tokenRequestDto) {
-        return memberService.refreshMember(tokenRequestDto);
+    public ResponseEntity<CommonApiResponse<TokenResponseDto>> reissue(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestHeader("Refresh") String refreshToken) {
+        return memberService.reissue(accessToken, refreshToken);
     }
 }

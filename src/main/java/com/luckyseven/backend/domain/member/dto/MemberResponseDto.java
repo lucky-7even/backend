@@ -18,6 +18,10 @@ public class MemberResponseDto {
 
     private String password;
 
+    private String profileImage;
+
+    private boolean isSocial;
+
     private String accessToken;
 
     private String refreshToken;
@@ -27,6 +31,8 @@ public class MemberResponseDto {
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .password(member.getPassword())
+                .profileImage(member.getProfileImage())
+                .isSocial(member.isSocial())
                 .build();
     }
 
@@ -35,6 +41,8 @@ public class MemberResponseDto {
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .password(member.getPassword())
+                .profileImage(member.getProfileImage())
+                .isSocial(member.isSocial())
                 .accessToken(tokenResponseDto.getAccessToken())
                 .refreshToken(tokenResponseDto.getRefreshToken())
                 .build();

@@ -12,6 +12,9 @@ spring:
     url: jdbc:mysql://awseb-e-2i2yqpaekr-stack-awsebrdsdatabase-yjwqd5ap0ugz.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
     username: admin
     password: rejin0421
+    redis:
+      host: luckyseven-redis.l6eajq.ng.0001.apn2.cache.amazonaws.com:6379
+      port: 6379
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -26,7 +29,7 @@ spring:
         registration:
           kakao:
             client-id: 46ec58d196bd0e72f56e34641ceec564
-            redirect-uri: http://localhost:8080/kakao/callback
+            redirect-uri: http://luckyseven-env.ap-northeast-2.elasticbeanstalk.com/kakao/callback
             client-authentication-method: POST
             client-secret: dHp9KmlsjhGhVpE6mFA8jXfsYF1HRzTV
             authorization-grant-type: authorization_code

@@ -1,56 +1,67 @@
 package com.luckyseven.backend.domain.member;
 
-import com.google.gson.JsonParser;
-import com.google.gson.JsonElement;
 import com.luckyseven.backend.domain.member.dto.KakaoUserInfo;
-import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.security.dto.OauthTokenResponse;
+import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
 import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
 import com.luckyseven.backend.global.error.ErrorCode;
 import com.luckyseven.backend.global.error.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OAuthService {
-    private static final String BEARER_TYPE = "Bearer";
-
     private final InMemoryClientRegistrationRepository inMemoryRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public MemberResponseDto login(String code) {
+    public ResponseEntity<MemberResponseDto> login(String code) {
         String providerName = "kakao";
         ClientRegistration provider = inMemoryRepository.findByRegistrationId(providerName);
         OauthTokenResponse tokenResponse = getToken(code, provider);
-        MemberResponseDto memberResponseDto = getUserProfile(providerName, tokenResponse, provider);
+        Member member = getUserProfile(tokenResponse, provider);
 
-        tokenProvider.generateToken(memberResponseDto.getEmail());
+        HttpHeaders httpHeaders = new HttpHeaders();
 
-        return memberResponseDto;
+        // 회원 정보가 있고 -> 소셜로 가입한 이력이 있다면 -> 로그인(토큰 발급)
+        // 회원 정보가 없고 -> 소셜로 가입하려면 -> 회원가입 -> 로그인(토큰 발급)
+        if ((!memberRepository.existsByEmail(member.getEmail())) && member.isSocial()) {
+            memberRepository.save(member);
+        } else if (memberRepository.existsByEmail(member.getEmail())
+                && member.isSocial()) {
+            log.info("바로 로그인으로 넘어갑니다.");
+        }
+        Member finalMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(
+                () -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
+        TokenResponseDto tokenResponseDto = tokenProvider.generateToken(finalMember.getEmail());
+        httpHeaders.add("Authorization", "Bearer " + tokenResponseDto.getAccessToken());
+        
+        return new ResponseEntity<>(MemberResponseDto.of(finalMember, tokenResponseDto), httpHeaders, HttpStatus.OK);
     }
 
     private OauthTokenResponse getToken(String code, ClientRegistration provider) {
@@ -78,28 +89,20 @@ public class OAuthService {
         return formData;
     }
 
-    private MemberResponseDto getUserProfile(String providerName, OauthTokenResponse tokenResponse, ClientRegistration provider) {
+    private Member getUserProfile(OauthTokenResponse tokenResponse, ClientRegistration provider) {
         Map<String, Object> userAttributes = getUserAttributes(provider, tokenResponse);
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(userAttributes);
 
-        String provide = kakaoUserInfo.getProvider();
-        String providerId = kakaoUserInfo.getProviderId();
         String nickName = kakaoUserInfo.getNickName();
         String email = kakaoUserInfo.getEmail();
         String imageUrl = kakaoUserInfo.getImageUrl();
 
-        Optional<Member> checkMember = memberRepository.findByEmail(email);
-        if (checkMember.isPresent()) {
-            throw new BadRequestException(ErrorCode.MEMBER_ALREADY_EXIST);
-        }
-        Member member = Member.builder()
+        return Member.builder()
                 .nickname(nickName)
                 .email(email)
                 .profileImage(imageUrl)
+                .isSocial(true)
                 .build();
-        memberRepository.save(member);
-
-        return MemberResponseDto.of(member);
     }
 
     private Map<String, Object> getUserAttributes(ClientRegistration provider, OauthTokenResponse tokenResponse) {

@@ -1,44 +1,44 @@
 package com.luckyseven.backend.domain.member;
 
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
-import com.luckyseven.backend.global.config.CommonApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("kakao")
 @Api(tags = "소셜 로그인")
 public class OAuthController {
     private final OAuthService oAuthService;
 
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String redirectUrl;
+
     @GetMapping("oauth")
     @ApiOperation(value = "인가 코드 받기")
-    public ResponseEntity<?> kakaoConnect() {
-        String url = "kauth.kakao.com/oauth/authorize?" +
+    public ResponseEntity<?> kakaoConnect() throws URISyntaxException {
+        String url = "https://kauth.kakao.com/oauth/authorize?" +
                 "client_id=" + "46ec58d196bd0e72f56e34641ceec564" +
-                "&redirect_uri=http://localhost:8080/kakao/callback" +
+                "&redirect_uri=" + redirectUrl +
                 "&response_type=code";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(url));
-
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        URI redirectUri = new URI(url);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(redirectUri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 
     @GetMapping("callback")
     public ResponseEntity<MemberResponseDto> login(@RequestParam String code) {
-        MemberResponseDto memberResponseDto = oAuthService.login(code);
-
-        return ResponseEntity.ok(memberResponseDto);
+        return oAuthService.login(code);
     }
-
-
 }
