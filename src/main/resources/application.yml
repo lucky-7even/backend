@@ -1,24 +1,12 @@
-server:
-  port: 5000
 
 spring:
-  profiles:
-    default: prod
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://awseb-e-2i2yqpaekr-stack-awsebrdsdatabase-yjwqd5ap0ugz.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
-    username: admin
-    password: rejin0421
-    redis:
-      host: luckyseven-redis.l6eajq.ng.0001.apn2.cache.amazonaws.com:6379
-      port: 6379
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
@@ -52,6 +40,7 @@ jwt:
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
   #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  token-validity-in-seconds: 86400 # 24시간
 
 logging:
   level:
