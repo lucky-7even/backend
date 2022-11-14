@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
-    @ApiModelProperty(example = "jimin1126@naver.com")
+    @ApiModelProperty(example = "jimin112688@gmail.com")
     @NotBlank(message = "이메일은 필수 입력값입니다.")
     private String email;
 

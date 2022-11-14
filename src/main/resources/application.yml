@@ -3,6 +3,14 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://awseb-e-2i2yqpaekr-stack-awsebrdsdatabase-yjwqd5ap0ugz.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
+    username: admin
+    password: rejin0421
+    redis:
+      host: luckyseven-redis.l6eajq.ng.0001.apn2.cache.amazonaws.com
+      port: 6379
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
