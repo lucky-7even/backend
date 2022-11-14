@@ -1,6 +1,7 @@
 package com.luckyseven.backend.domain.member.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +33,7 @@ public class Member {
 
     // 위도
     private Double lng;
+
+    // 소셜 회원가입여부
+    private boolean isSocial;
 }

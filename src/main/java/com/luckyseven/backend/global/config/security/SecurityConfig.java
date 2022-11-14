@@ -1,9 +1,7 @@
 package com.luckyseven.backend.global.config.security;
 
-import com.luckyseven.backend.global.config.security.jwt.JwtAccessDeniedHandler;
-import com.luckyseven.backend.global.config.security.jwt.JwtAuthenticationEntryPoint;
-import com.luckyseven.backend.global.config.security.jwt.JwtSecurityConfig;
-import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
+import com.luckyseven.backend.domain.member.OAuthService;
+import com.luckyseven.backend.global.config.security.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

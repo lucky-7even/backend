@@ -4,10 +4,12 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenDto {
-    // accessToken
-    private String token;
+@Builder
+public class TokenResponseDto {
+
+    private String accessToken;
+
+    private String refreshToken;
 }

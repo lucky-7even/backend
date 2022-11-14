@@ -11,6 +11,30 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 46ec58d196bd0e72f56e34641ceec564
+            redirect-uri: http://luckyseven-env.ap-northeast-2.elasticbeanstalk.com/kakao/callback
+            client-authentication-method: POST
+            client-secret: dHp9KmlsjhGhVpE6mFA8jXfsYF1HRzTV
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+              - gender
+              - birthday
+            client_name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
 jwt:
   header: Authorization
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.

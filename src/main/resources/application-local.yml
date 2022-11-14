@@ -5,11 +5,37 @@ spring:
   config:
     import:
       - optional:classpath:/application.yml
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem://localhost/~/test;MODE=MYSQL
-    username: sa
-    password:
   h2:
     console:
       enabled: 'true'
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:8000/luckyseven
+    username: jimin
+    password: simon1126
+    redis:
+      host: localhost
+      port: 6379
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 46ec58d196bd0e72f56e34641ceec564
+            redirect-uri: http://localhost:8080/kakao/callback
+            client-authentication-method: POST
+            client-secret: dHp9KmlsjhGhVpE6mFA8jXfsYF1HRzTV
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+              - gender
+              - birthday
+            client_name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id

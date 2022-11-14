@@ -18,14 +18,13 @@ public enum ErrorCode {
     _METHOD_NOT_ALLOWED(METHOD_NOT_ALLOWED, "C003", "지원하지 않는 Http Method 입니다"),
     _UNSUPPORTED_MEDIA_TYPE(UNSUPPORTED_MEDIA_TYPE, "C004", "지원하지 않는 Http Media PendingType 입니다"),
     _INVALID_REQUEST_PARAMETER(BAD_REQUEST, "C005", "유효하지 않은 Request Parameter 입니다"),
-    CANNOT_CREATE_RECOMMEND(INTERNAL_SERVER_ERROR, "C006", "추천사 작성에 실패했습니다"),
-    CANNOT_CREATE_RECOMMEND_REQUEST(INTERNAL_SERVER_ERROR, "C007", "추천사 요청에 실패했습니다"),
 
     NOT_MULTIPART_HEADER(BAD_REQUEST, "C008", "Multipart 헤더가 아닙니다"),
     AMAZON_ACCESS_DENIED(FORBIDDEN, "C009", "Amazon S3 접근이 거부되었습니다"),
 
     /* Validation 오류 */
     PARAMETER_NOT_VALID(BAD_REQUEST, "P000", "인자가 유효하지 않습니다"),
+    PASSWORD_CONFIRM_NOT_VALID(BAD_REQUEST, "P001", "입력된 비밀번호와 일치하지 않습니다."),
 
     /* Database 관련 오류 */
     DUPLICATE_RESOURCE(CONFLICT, "D001", "데이터가 이미 존재합니다"),
@@ -35,17 +34,19 @@ public enum ErrorCode {
     EXPIRED_TOKEN(UNAUTHORIZED, "AUTH001", "만료된 엑세스 토큰입니다"),
     INVALID_REFRESH_TOKEN(UNAUTHORIZED, "AUTH002", "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(UNAUTHORIZED, "AUTH003", "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
-    INVALID_AUTH_TOKEN(UNAUTHORIZED, "AUTH004", "권한 정보가 없는 토큰입니다"),
-    UNAUTHORIZED_USER(UNAUTHORIZED, "AUTH005", "로그인이 필요합니다"),
-    REFRESH_TOKEN_NOT_FOUND(UNAUTHORIZED, "AUTH006", "로그아웃 된 사용자입니다"),
-    FORBIDDEN_USER(FORBIDDEN, "AUTH007", "권한이 없는 유저입니다"),
-    UNSUPPORTED_TOKEN(UNAUTHORIZED, "AUTH008", "지원하지 않는 토큰입니다"),
-    INVALID_SIGNATURE(UNAUTHORIZED, "AUTH009", "잘못된 JWT 서명입니다"),
-    MISMATCH_VERIFICATION_CODE(UNAUTHORIZED, "AUTH010", "인증번호가 일치하지 않습니다"),
-    EXPIRED_VERIFICATION_CODE(UNAUTHORIZED, "AUTH011", "인증번호가 만료되었습니다"),
-    INVALID_USER_TOKEN(UNAUTHORIZED, "AUTH012", "서버에 토큰과 일치하는 정보가 없습니다"),
+    EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "AUTH004", "만료된 리프레시 토큰입니다"),
+    INVALID_AUTH_TOKEN(UNAUTHORIZED, "AUTH005", "권한 정보가 없는 토큰입니다"),
+    UNAUTHORIZED_USER(UNAUTHORIZED, "AUTH006", "로그인이 필요합니다"),
+    REFRESH_TOKEN_NOT_FOUND(UNAUTHORIZED, "AUTH007", "로그아웃 된 사용자입니다"),
+    FORBIDDEN_USER(FORBIDDEN, "AUTH008", "권한이 없는 유저입니다"),
+    UNSUPPORTED_TOKEN(UNAUTHORIZED, "AUTH009", "지원하지 않는 토큰입니다"),
+    INVALID_SIGNATURE(UNAUTHORIZED, "AUTH010", "잘못된 JWT 서명입니다"),
+    MISMATCH_VERIFICATION_CODE(UNAUTHORIZED, "AUTH011", "인증번호가 일치하지 않습니다"),
+    EXPIRED_VERIFICATION_CODE(UNAUTHORIZED, "AUTH012", "인증번호가 만료되었습니다"),
+    INVALID_USER_TOKEN(UNAUTHORIZED, "AUTH013", "서버에 토큰과 일치하는 정보가 없습니다"),
 
     LOGIN_FAILED(UNAUTHORIZED, "AUTH013", "로그인에 실패했습니다"),
+    INVALID_ACCESS_TOKEN(UNAUTHORIZED, "AUTH015", "유효하지 않은 엑세스 토큰입니다"),
 
     /* Member 관련 오류 */
     MEMBER_ALREADY_EXIST(BAD_REQUEST, "M002","이미 가입된 유저입니다"),
