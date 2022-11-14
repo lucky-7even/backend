@@ -1,0 +1,12 @@
+server:
+  port: 5000
+
+spring:
+  config:
+    import:
+      - optional:classpath:/application.yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://awseb-e-2i2yqpaekr-stack-awsebrdsdatabase-yjwqd5ap0ugz.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
+    username: admin
+    password: rejin0421
