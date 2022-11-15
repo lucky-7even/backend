@@ -37,10 +37,16 @@ public class Product {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
+	private Region region;
+
+	@Enumerated(EnumType.STRING)
 	private ProductStatus productStatus;
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	private List<String> images = new ArrayList<>();
+
+	public Product() {
+	}
 
 	public Product(Member member, String name, int price, String description) {
 		this.member = member;
@@ -48,5 +54,4 @@ public class Product {
 		this.price = price;
 		this.description = description;
 	}
-
 }

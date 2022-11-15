@@ -5,6 +5,7 @@ import static org.springframework.beans.BeanUtils.*;
 import com.luckyseven.backend.domain.Category;
 import com.luckyseven.backend.domain.Product;
 import com.luckyseven.backend.domain.ProductStatus;
+import com.luckyseven.backend.domain.Region;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -33,6 +34,9 @@ public class ProductResponse {
 
 	@ApiModelProperty(value = "상태", required = true)
 	private ProductStatus productStatus;
+
+	@ApiModelProperty(value = "지역", required = true)
+	private Region region;
 
 	public ProductResponse(Product source) {
 		copyProperties(source, this);

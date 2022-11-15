@@ -29,9 +29,7 @@ public class Member {
 
     private String password;
 
-    // 경도
     private Double lat;
 
-    // 위도
     private Double lng;
 }
