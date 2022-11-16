@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.member.dto;
+package com.luckyseven.backend.global.config.security.oauth.dto;
 
 import java.util.Map;
 
