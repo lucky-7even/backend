@@ -1,10 +1,5 @@
 package com.luckyseven.backend.global.config.security;
 
-import com.luckyseven.backend.global.config.security.jwt.JwtAccessDeniedHandler;
-import com.luckyseven.backend.global.config.security.jwt.JwtAuthenticationEntryPoint;
-import com.luckyseven.backend.global.config.security.jwt.JwtSecurityConfig;
-import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -15,6 +10,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.luckyseven.backend.global.config.security.jwt.JwtAccessDeniedHandler;
+import com.luckyseven.backend.global.config.security.jwt.JwtAuthenticationEntryPoint;
+import com.luckyseven.backend.global.config.security.jwt.JwtSecurityConfig;
+import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity

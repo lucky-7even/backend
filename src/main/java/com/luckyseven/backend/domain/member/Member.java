@@ -1,14 +1,14 @@
 package com.luckyseven.backend.domain.member;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -27,7 +27,7 @@ public class Member {
 
     private String email;
 
-    private String password;
+    private String passwd;
 
     private Double lat;
 

@@ -5,7 +5,7 @@ import static com.luckyseven.backend.global.config.CommonApiResponse.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,14 +28,6 @@ public class ProductController {
 
 	public ProductController(ProductService productService) {
 		this.productService = productService;
-	}
-
-	@PostConstruct
-	public void init() {
-		productService.write(new ProductRequest(1L, "냉장고", Category.AA, 1000, "좋아요"));
-		productService.write(new ProductRequest(2L, "소파", Category.BB, 5500, "짱이에요"));
-		productService.write(new ProductRequest(3L, "에어팟1", Category.CC, 10000, "빌려드립니다."));
-		productService.write(new ProductRequest(4L, "에어팟2", Category.DD, 15000, "오래 빌려드립니다."));
 	}
 
 	@GetMapping("product")
@@ -62,7 +54,7 @@ public class ProductController {
 	@ApiOperation(value = "물품 등록")
 	public CommonApiResponse<ProductResponse> producting(
 		@ApiParam(value = "example: {\"address\": \"test@naver.com\"}")
-		@RequestBody ProductRequest productRequest) {
+		@Valid @RequestBody ProductRequest productRequest) {
 		return of(
 			new ProductResponse(
 				productService.write(productRequest)

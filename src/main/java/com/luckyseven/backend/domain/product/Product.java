@@ -1,7 +1,5 @@
 package com.luckyseven.backend.domain.product;
 
-import static org.springframework.beans.BeanUtils.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.luckyseven.backend.domain.member.Member;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
 public class Product {
 	@Id @GeneratedValue
 	@Column(name = "product_id")
@@ -32,15 +31,21 @@ public class Product {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Category category;
 
+	@NotNull
+	@Size(max = 50)
 	private String name;
 
+	@NotNull
 	private int price;
 
+	@NotNull
 	private String description;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Region region = Region.BONGCHEON;
 
@@ -53,7 +58,11 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(ProductRequest source) {
-		copyProperties(source, this);
+	public Product(Member member, Category category, String name, int price, String description) {
+		this.member = member;
+		this.category = category;
+		this.name = name;
+		this.price = price;
+		this.description = description;
 	}
 }

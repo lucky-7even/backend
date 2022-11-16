@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckyseven.backend.global.error.exception.NotFoundException;
 import com.luckyseven.backend.domain.member.MemberService;
+import com.luckyseven.backend.global.error.ErrorCode;
+import com.luckyseven.backend.global.error.exception.BusinessException;
 
 @Service
 public class ProductService {
@@ -21,11 +22,15 @@ public class ProductService {
 
 	@Transactional
 	public Product write(ProductRequest productRequest) {
-		// Member member = memberService.findOne(productRequest.getMemberId());
-		Product product = new Product(productRequest);
-		System.out.println(product);
-		// member의 위도 경도로 동 찾기
-		return productRepository.save(product);
+		return productRepository.save(
+			new Product(
+					memberService.findOne(productRequest.getMemberId()),
+					productRequest.getCategory(),
+					productRequest.getName(),
+					productRequest.getPrice(),
+					productRequest.getDescription()
+			)
+		);
 	}
 
 	public List<Product> findAll() {
@@ -34,7 +39,7 @@ public class ProductService {
 
 	public Product findOne(Long id) {
 		return productRepository.findById(id)
-			.orElseThrow(() -> new NotFoundException("해당 Product가 존재하지 않습니다."));
+			.orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
 	}
 
 	public List<Product> findByNameContains(String name) {
