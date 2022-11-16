@@ -1,4 +1,6 @@
-package com.luckyseven.backend.domain;
+package com.luckyseven.backend.domain.product;
+
+import static org.springframework.beans.BeanUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.luckyseven.backend.domain.member.Member;
+
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Getter @Setter
 public class Product {
 	@Id @GeneratedValue
 	@Column(name = "product_id")
@@ -37,10 +42,10 @@ public class Product {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
-	private Region region;
+	private Region region = Region.BONGCHEON;
 
 	@Enumerated(EnumType.STRING)
-	private ProductStatus productStatus;
+	private ProductStatus productStatus = ProductStatus.WAITING;
 
 	@ElementCollection(fetch = FetchType.LAZY)
 	private List<String> images = new ArrayList<>();
@@ -48,10 +53,7 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(Member member, String name, int price, String description) {
-		this.member = member;
-		this.name = name;
-		this.price = price;
-		this.description = description;
+	public Product(ProductRequest source) {
+		copyProperties(source, this);
 	}
 }

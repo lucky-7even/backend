@@ -1,11 +1,6 @@
-package com.luckyseven.backend.controller.product;
+package com.luckyseven.backend.domain.product;
 
 import static org.springframework.beans.BeanUtils.*;
-
-import com.luckyseven.backend.domain.Category;
-import com.luckyseven.backend.domain.Product;
-import com.luckyseven.backend.domain.ProductStatus;
-import com.luckyseven.backend.domain.Region;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -15,7 +10,7 @@ import lombok.Setter;
 public class ProductResponse {
 
 	@ApiModelProperty(value = "PK", required = true)
-	private Long id;
+	private Long productId;
 
 	@ApiModelProperty(value = "대여하는 유저", required = true)
 	private Long memberId;

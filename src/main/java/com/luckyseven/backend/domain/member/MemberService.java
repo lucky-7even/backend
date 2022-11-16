@@ -1,10 +1,8 @@
-package com.luckyseven.backend.service.member;
+package com.luckyseven.backend.domain.member;
 
 import org.springframework.stereotype.Service;
 
-import com.luckyseven.backend.domain.Member;
 import com.luckyseven.backend.global.error.exception.NotFoundException;
-import com.luckyseven.backend.repository.member.MemberRepository;
 
 @Service
 public class MemberService {

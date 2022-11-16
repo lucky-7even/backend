@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain;
+package com.luckyseven.backend.domain.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
