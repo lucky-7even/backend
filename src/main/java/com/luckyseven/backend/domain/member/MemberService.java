@@ -5,7 +5,6 @@ import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.CommonApiResponse;
-import com.luckyseven.backend.global.config.security.dto.TokenRequestDto;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
 import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
 import com.luckyseven.backend.global.error.ErrorCode;
@@ -36,12 +35,9 @@ public class MemberService {
     // 일반 회원가입
     @Transactional
     public MemberResponseDto makeMember(MemberRequestDto memberRequestDto) {
-        Optional<Member> checkMember = memberRepository.findByEmail(memberRequestDto.getEmail());
+        Optional<Member> checkMember = memberRepository.findByEmailAndIsSocialFalse(memberRequestDto.getEmail());
         if (checkMember.isPresent()) {
             throw new BadRequestException(ErrorCode.MEMBER_ALREADY_EXIST);
-        }
-        else if (!Objects.equals(memberRequestDto.getPassword(), memberRequestDto.getPasswordConfirm())) {
-            throw new BadRequestException(ErrorCode.PASSWORD_CONFIRM_NOT_VALID);
         }
 
         Member member = Member.builder()
@@ -58,7 +54,7 @@ public class MemberService {
     // 일반 로그인
     @Transactional
     public ResponseEntity<CommonApiResponse<MemberResponseDto>> loginMember(LoginDto loginDto) {
-        Optional<Member> checkMember = memberRepository.findByEmail(loginDto.getEmail());
+        Optional<Member> checkMember = memberRepository.findByEmailAndIsSocialFalse(loginDto.getEmail());
         if (checkMember.isEmpty()) {
             throw new BadRequestException(ErrorCode.MEMBER_NOT_FOUND);
         }
@@ -72,7 +68,8 @@ public class MemberService {
         HttpHeaders httpHeaders = new HttpHeaders();
         TokenResponseDto tokenResponseDTO = tokenProvider.generateToken(authentication.getName());
 
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findByEmailAndIsSocialFalse(authentication.getName())
+                .orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDTO.getAccessToken());
 
         return new ResponseEntity<>(CommonApiResponse.of(MemberResponseDto.of(member, tokenResponseDTO)), httpHeaders, HttpStatus.OK);

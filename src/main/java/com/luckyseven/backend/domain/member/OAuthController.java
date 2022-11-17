@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -88,7 +87,6 @@ public class OAuthController {
     @GetMapping("google/callback")
     @ApiOperation(value = "네이버, 구글 access, refreshToken 발급")
     public ResponseEntity<MemberResponseDto> loginGoogle(@RequestParam String code) {
-        System.out.println(code);
         return oAuthService.loginNaverGoogle("google", code);
     }
 }

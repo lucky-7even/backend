@@ -19,10 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.stereotype.Service;
@@ -65,8 +61,8 @@ public class OAuthService {
                 && memberRepository.existsByEmailAndIsSocialFalse(member.getEmail())) {
             log.info("바로 로그인으로 넘어갑니다.");
         }
-        Member finalMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(
-                () -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
+        Member finalMember = memberRepository.findByEmailAndIsSocialTrue(member.getEmail())
+                .orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
 
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(finalMember.getEmail());
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDto.getAccessToken());

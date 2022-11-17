@@ -28,6 +28,17 @@ public enum OauthAttributes {
                     .imageUrl((String) attributes.get("picture"))
                     .build();
         }
+    },
+    KAKAO("kakao") {
+        @Override
+        public UserProfile of(Map<String, Object> attributes) {
+            return UserProfile.builder()
+                    .oauthId(String.valueOf(attributes.get("sub")))
+                    .email((String) attributes.get("email"))
+                    .name((String) attributes.get("name"))
+                    .imageUrl((String) attributes.get("picture"))
+                    .build();
+        }
     };
 
     private final String providerName;
