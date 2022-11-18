@@ -46,7 +46,9 @@ public enum ErrorCode {
     INVALID_USER_TOKEN(UNAUTHORIZED, "AUTH013", "서버에 토큰과 일치하는 정보가 없습니다"),
 
     LOGIN_FAILED(UNAUTHORIZED, "AUTH013", "로그인에 실패했습니다"),
+    SOCIAL_ALREADY_EXIST(BAD_REQUEST, "AUTH014", "소셜로 가입된 회원입니다"),
     INVALID_ACCESS_TOKEN(UNAUTHORIZED, "AUTH015", "유효하지 않은 엑세스 토큰입니다"),
+    COMMON_ALREADY_EXIST(BAD_REQUEST, "AUTH016", "일반으로 가입된 회원입니다"),
 
     /* Member 관련 오류 */
     MEMBER_ALREADY_EXIST(BAD_REQUEST, "M002","이미 가입된 유저입니다"),

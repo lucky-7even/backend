@@ -89,4 +89,9 @@ public class OAuthController {
     public ResponseEntity<MemberResponseDto> loginGoogle(@RequestParam String code) {
         return oAuthService.loginNaverGoogle("google", code);
     }
+
+    @GetMapping("kakao/findId")
+    public ResponseEntity<String> findId(Authentication authentication) {
+        return ResponseEntity.ok(authentication.getName());
+    }
 }

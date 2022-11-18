@@ -19,6 +19,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.stereotype.Service;
@@ -30,6 +35,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -39,6 +45,8 @@ public class OAuthService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final InMemoryProviderRepository inMemoryProviderRepository;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public ResponseEntity<MemberResponseDto> kakaoLogin(String code) {
@@ -47,23 +55,29 @@ public class OAuthService {
         OauthTokenResponse tokenResponse = getToken(code, provider);
         Member member = getUserProfile(tokenResponse, provider);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
+        Optional<Member> checkMember = memberRepository.findByEmail(member.getEmail());
+        if (checkMember.isPresent() && !member.isSocial()) {
+            throw new BadRequestException(ErrorCode.COMMON_ALREADY_EXIST);
+        }
 
-        // 회원 정보가 있고 -> 소셜로 가입한 이력이 있다면 -> 로그인(토큰 발급)
-        // 회원 정보가 없고 -> 소셜로 가입하려면 -> 회원가입 -> 로그인(토큰 발급)
-        // 낼 중복처리(11/15)
+        // 회원 정보가 있다면? -> 로그인(토큰 발급)
+        // 회원 정보가 없다면? -> 회원가입 -> 로그인(토큰 발급)
         if ((!memberRepository.existsByEmail(member.getEmail()))) {
             memberRepository.save(member);
-        } else if (memberRepository.existsByEmailAndIsSocialFalse(member.getEmail())
-                && !memberRepository.existsByEmailAndIsSocialTrue(member.getEmail())) {
-            memberRepository.save(member);
-        } else if (memberRepository.existsByEmailAndIsSocialTrue(member.getEmail())
-                && memberRepository.existsByEmailAndIsSocialFalse(member.getEmail())) {
+        } else if (memberRepository.existsByEmail(member.getEmail())) {
             log.info("바로 로그인으로 넘어갑니다.");
         }
-        Member finalMember = memberRepository.findByEmailAndIsSocialTrue(member.getEmail())
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getEmail(), "social");
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Member finalMember = memberRepository.findByEmail(member.getEmail())
                 .orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
 
+        HttpHeaders httpHeaders = new HttpHeaders();
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(finalMember.getEmail());
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDto.getAccessToken());
         
@@ -84,20 +98,28 @@ public class OAuthService {
         Member member = Member.builder()
                 .nickname(userProfile.getName())
                 .email(userProfile.getEmail())
+                .password(passwordEncoder.encode("social"))
                 .profileImage(userProfile.getImageUrl())
                 .isSocial(true)
                 .build();
 
+        Optional<Member> checkMember = memberRepository.findByEmail(userProfile.getEmail());
+        if (checkMember.isPresent() && !checkMember.get().isSocial()) {
+            throw new BadRequestException(ErrorCode.COMMON_ALREADY_EXIST);
+        }
+
         // 유저 DB에 저장
         if ((!memberRepository.existsByEmail(member.getEmail()))) {
             memberRepository.save(member);
-        } else if (memberRepository.existsByEmailAndIsSocialFalse(member.getEmail())
-                && !memberRepository.existsByEmailAndIsSocialTrue(member.getEmail())) {
-            memberRepository.save(member);
-        } else if (memberRepository.existsByEmailAndIsSocialTrue(member.getEmail())
-                && memberRepository.existsByEmailAndIsSocialFalse(member.getEmail())) {
+        } else if (memberRepository.existsByEmail(member.getEmail())) {
             log.info("바로 로그인으로 넘어갑니다.");
         }
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(member.getEmail(), "social");
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         TokenResponseDto tokenResponseDto = tokenProvider.generateToken(member.getEmail());
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -171,6 +193,7 @@ public class OAuthService {
         return Member.builder()
                 .nickname(nickName)
                 .email(email)
+                .password(passwordEncoder.encode("social"))
                 .profileImage(imageUrl)
                 .isSocial(true)
                 .build();

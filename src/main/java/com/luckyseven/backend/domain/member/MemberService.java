@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -35,8 +34,10 @@ public class MemberService {
     // 일반 회원가입
     @Transactional
     public MemberResponseDto makeMember(MemberRequestDto memberRequestDto) {
-        Optional<Member> checkMember = memberRepository.findByEmailAndIsSocialFalse(memberRequestDto.getEmail());
-        if (checkMember.isPresent()) {
+        Optional<Member> checkMember = memberRepository.findByEmail(memberRequestDto.getEmail());
+        if (checkMember.isPresent() && checkMember.get().isSocial()) {
+            throw new BadRequestException(ErrorCode.SOCIAL_ALREADY_EXIST);
+        } else if (checkMember.isPresent() && !checkMember.get().isSocial()) {
             throw new BadRequestException(ErrorCode.MEMBER_ALREADY_EXIST);
         }
 
@@ -54,9 +55,11 @@ public class MemberService {
     // 일반 로그인
     @Transactional
     public ResponseEntity<CommonApiResponse<MemberResponseDto>> loginMember(LoginDto loginDto) {
-        Optional<Member> checkMember = memberRepository.findByEmailAndIsSocialFalse(loginDto.getEmail());
+        Optional<Member> checkMember = memberRepository.findByEmail(loginDto.getEmail());
         if (checkMember.isEmpty()) {
             throw new BadRequestException(ErrorCode.MEMBER_NOT_FOUND);
+        } else if (checkMember.get().isSocial()) {
+            throw new BadRequestException(ErrorCode.SOCIAL_ALREADY_EXIST);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -68,7 +71,7 @@ public class MemberService {
         HttpHeaders httpHeaders = new HttpHeaders();
         TokenResponseDto tokenResponseDTO = tokenProvider.generateToken(authentication.getName());
 
-        Member member = memberRepository.findByEmailAndIsSocialFalse(authentication.getName())
+        Member member = memberRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDTO.getAccessToken());
 
