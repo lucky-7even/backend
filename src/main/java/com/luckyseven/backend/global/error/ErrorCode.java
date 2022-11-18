@@ -50,6 +50,10 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN(UNAUTHORIZED, "AUTH015", "유효하지 않은 엑세스 토큰입니다"),
     COMMON_ALREADY_EXIST(BAD_REQUEST, "AUTH016", "일반으로 가입된 회원입니다"),
 
+    /* 이미지 관련 오류 */
+    INVALID_FILE_EXTENSION(BAD_REQUEST, "FILE000", "잘못된 파일 확장자명입니다"),
+    FILE_UPLOAD_FAILED(INTERNAL_SERVER_ERROR, "FILE001", "파일 업로드에 실패했습니다"),
+
     /* Member 관련 오류 */
     MEMBER_ALREADY_EXIST(BAD_REQUEST, "M002","이미 가입된 유저입니다"),
     MEMBER_NOT_FOUND(NOT_FOUND, "M003","해당 유저 정보를 찾을 수 없습니다"),

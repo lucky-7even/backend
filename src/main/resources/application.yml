@@ -47,6 +47,26 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
+cloud:
+  aws:
+    s3:
+      bucket: luckyseven-bucket
+    credentials:
+      access-key: AKIAXWS25PEYEMGONWFI
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
+
 oauth2:
   user:
     google:
@@ -77,9 +97,4 @@ jwt:
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400 # 24시간
 
-logging:
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: ERROR
+
