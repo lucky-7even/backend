@@ -96,7 +96,7 @@ public class OAuthController {
         return ResponseEntity.ok(authentication.getName());
     }
 
-    @GetMapping("kakao/callback")
+    @PostMapping("kakao/callback")
     @ApiOperation(value = "카카오 access, refreshToken 발급")
     public ResponseEntity<MemberResponseDto> loginKakao(
             @RequestBody AuthCodeRequest authCodeRequest
