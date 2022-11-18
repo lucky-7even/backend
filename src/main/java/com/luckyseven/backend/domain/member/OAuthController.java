@@ -1,6 +1,7 @@
 package com.luckyseven.backend.domain.member;
 
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
+import com.luckyseven.backend.global.config.security.oauth.dto.AuthCodeRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -72,11 +73,11 @@ public class OAuthController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 
-    @GetMapping("kakao/callback")
+    /*@GetMapping("kakao/callback")
     @ApiOperation(value = "카카오 access, refreshToken 발급")
     public ResponseEntity<MemberResponseDto> login(@RequestParam String code) {
         return oAuthService.kakaoLogin(code);
-    }
+    }*/
 
     @GetMapping("naver/callback")
     @ApiOperation(value = "네이버, 구글 access, refreshToken 발급")
@@ -93,5 +94,13 @@ public class OAuthController {
     @GetMapping("kakao/findId")
     public ResponseEntity<String> findId(Authentication authentication) {
         return ResponseEntity.ok(authentication.getName());
+    }
+
+    @GetMapping("kakao/callback")
+    @ApiOperation(value = "카카오 access, refreshToken 발급")
+    public ResponseEntity<MemberResponseDto> loginKakao(
+            @RequestBody AuthCodeRequest authCodeRequest
+    ) {
+        return oAuthService.kakaoLogin(authCodeRequest.getCode());
     }
 }

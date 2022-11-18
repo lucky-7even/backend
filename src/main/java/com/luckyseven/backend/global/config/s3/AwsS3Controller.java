@@ -1,6 +1,5 @@
 package com.luckyseven.backend.global.config.s3;
 
-import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.CommonApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
