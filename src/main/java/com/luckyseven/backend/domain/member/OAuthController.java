@@ -101,7 +101,6 @@ public class OAuthController {
     public ResponseEntity<MemberResponseDto> loginKakao(
             @RequestBody AuthCodeRequest authCodeRequest
     ) {
-        System.out.println(authCodeRequest.getCode());
         return oAuthService.kakaoLogin(authCodeRequest.getCode());
     }
 }
