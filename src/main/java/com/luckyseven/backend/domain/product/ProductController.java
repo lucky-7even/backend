@@ -30,7 +30,7 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	@GetMapping("product")
+	@GetMapping("products")
 	@ApiOperation(value = "물품 전체 리스트, 검색 조회")
 	public CommonApiResponse<List<ProductResponse>> products(@RequestParam(required = false) String name) {
 		if (name != null) {
@@ -50,7 +50,7 @@ public class ProductController {
 		);
 	}
 
-	@PostMapping("product")
+	@PostMapping("products")
 	@ApiOperation(value = "물품 등록")
 	public CommonApiResponse<ProductResponse> producting(
 		@ApiParam(value = "example: {\"address\": \"test@naver.com\"}")
@@ -62,7 +62,7 @@ public class ProductController {
 		);
 	}
 
-	@GetMapping("product/{productId}")
+	@GetMapping("products/{productId}")
 	@ApiOperation(value = "물품 상세 페이지 조회")
 	public CommonApiResponse<ProductResponse> getProduct(
 		@ApiParam(value = "물품 아이디 PK", example = "1L") Long productId) {
