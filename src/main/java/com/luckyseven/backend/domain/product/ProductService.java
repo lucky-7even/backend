@@ -1,5 +1,7 @@
 package com.luckyseven.backend.domain.product;
 
+import static com.luckyseven.backend.global.error.ErrorCode.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ public class ProductService {
 
 	public Product findOne(Long id) {
 		return productRepository.findById(id)
-			.orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(PRODUCT_NOT_FOUND));
 	}
 
 	public List<Product> findByNameContains(String name) {

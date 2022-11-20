@@ -1,5 +1,7 @@
 package com.luckyseven.backend.domain.member;
 
+import static com.luckyseven.backend.global.error.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 
 import com.luckyseven.backend.global.error.ErrorCode;
@@ -16,6 +18,6 @@ public class MemberService {
 
 	public Member findOne(Long id) {
 		return memberRepository.findById(id)
-			.orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 	}
 }
