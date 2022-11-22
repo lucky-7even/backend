@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.chatroom;
+package com.luckyseven.backend.domain.chatroom.dto;
 
 import javax.validation.constraints.NotBlank;
 

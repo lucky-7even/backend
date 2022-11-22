@@ -8,8 +8,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.luckyseven.backend.domain.chatmessage.ChatMessage;
 import com.luckyseven.backend.domain.chatmessage.ChatMessageService;
+import com.luckyseven.backend.domain.chatmessage.entity.ChatMessage;
 import com.luckyseven.backend.domain.chatroom.ChatRoomService;
 
 @Controller

@@ -54,7 +54,8 @@ public enum ErrorCode {
     COUNTRY_NOT_FOUND(NOT_FOUND, "M004", "해당 국가를 찾을 수 없습니다"),
 
     /* Chat 관련 오류 */
-    NOT_FOUND_CHAT_ROOM(NOT_FOUND, "C001", "채팅방을 찾을 수 없습니다.");
+    NOT_FOUND_CHAT_ROOM(NOT_FOUND, "C001", "채팅방을 찾을 수 없습니다."),
+    INVALID_CHAT_ROOM_NAME(BAD_REQUEST, "C002", "유효하지 않은 채팅방 이름입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

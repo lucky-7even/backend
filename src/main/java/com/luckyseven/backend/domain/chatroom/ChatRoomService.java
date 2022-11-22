@@ -1,6 +1,6 @@
 package com.luckyseven.backend.domain.chatroom;
 
-import static com.example.websocketdemo.exception.ErrorCode.*;
+import static com.luckyseven.backend.global.error.ErrorCode.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.websocketdemo.exception.CustomException;
+import com.luckyseven.backend.domain.chatroom.dto.ChatRoomResponse;
+import com.luckyseven.backend.domain.chatroom.entity.ChatRoom;
+import com.luckyseven.backend.global.error.exception.BusinessException;
 
 @Service
 @Transactional
@@ -21,7 +23,7 @@ public class ChatRoomService {
 
     public void save(String name) {
         if (name == null || name.isBlank()) {
-            throw new CustomException(INVALID_CHAT_ROOM_NAME);
+            throw new BusinessException(INVALID_CHAT_ROOM_NAME);
         }
         chatRoomRepository.save(new ChatRoom(name));
     }
@@ -31,24 +33,4 @@ public class ChatRoomService {
                                  .map((chatRoom) -> new ChatRoomResponse(chatRoom))
                                  .collect(Collectors.toList());
     }
-
-    // public void deleteByCreatedDateLessThanEqual() {
-    //     chatRoomRepository.findAll().stream().forEach((chatRoom -> {
-    //         if (chatRoom.isRemovable()) {
-    //             chatRoomRepository.deleteById(chatRoom.getId());
-    //         }
-    //     }));
-    // }
-
-    // public void enter(String id) {
-    //     ChatRoom chatRoom = chatRoomRepository.findById(id)
-    //                                           .orElseThrow(() -> new CustomException(NOT_FOUND_CHAT_ROOM));
-    //     chatRoom.enter();
-    // }
-
-    // public void exit(String id) {
-    //     ChatRoom chatRoom = chatRoomRepository.findById(id)
-    //                                           .orElseThrow(() -> new CustomException(NOT_FOUND_CHAT_ROOM));
-    //     chatRoom.exit();
-    // }
 }

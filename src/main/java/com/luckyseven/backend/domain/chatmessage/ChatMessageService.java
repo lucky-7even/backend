@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.luckyseven.backend.domain.chatmessage.entity.ChatMessage;
 import com.luckyseven.backend.domain.chatroom.ChatRoomRepository;
 import com.luckyseven.backend.global.error.exception.BusinessException;
 

@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.chatroom;
+package com.luckyseven.backend.domain.chatroom.entity;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -20,19 +20,12 @@ public class ChatRoom {
     @Column(length = 50)
     private String name;
 
-    // private int count;
-
-    // @NotNull
-    // private LocalDateTime expiryDate;
-
     protected ChatRoom() {
     }
 
     public ChatRoom(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
-        // this.count = 0;
-        // this.expiryDate = now().plusHours(VALID_HOUR);
     }
 
     public String getId() {
@@ -43,21 +36,11 @@ public class ChatRoom {
         return name;
     }
 
-    // public int getCount() {
-    //     return count;
-    // }
-
-    // public LocalDateTime getExpiryDate() {
-    //     return expiryDate;
-    // }
-
     @Override
     public String toString() {
         return "ChatRoom{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                // ", count=" + count +
-                // ", expiryDate=" + expiryDate +
                 '}';
     }
 
@@ -73,22 +56,4 @@ public class ChatRoom {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    // public void enter() {
-    //     this.count++;
-    // }
-
-    // public void exit() {
-    //     this.count--;
-    //     if (count < 0) {
-    //         count = 0;
-    //     }
-    // }
-
-    // public boolean isRemovable() {
-    //     if (this.expiryDate.isAfter(now()) && this.count == 0) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
 }

@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.chatmessage;
+package com.luckyseven.backend.domain.chatmessage.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.luckyseven.backend.domain.chatroom.ChatRoom;
+import com.luckyseven.backend.domain.chatroom.entity.ChatRoom;
 
 @Entity
 public class ChatMessage {

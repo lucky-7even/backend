@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luckyseven.backend.domain.chatmessage.ChatMessage;
 import com.luckyseven.backend.domain.chatmessage.ChatMessageService;
+import com.luckyseven.backend.domain.chatmessage.entity.ChatMessage;
+import com.luckyseven.backend.domain.chatroom.dto.ChatRoomResponse;
+import com.luckyseven.backend.domain.chatroom.dto.ChatRoomSaveRequest;
 
 @RequestMapping("api/v1/chatRooms")
 @RestController
