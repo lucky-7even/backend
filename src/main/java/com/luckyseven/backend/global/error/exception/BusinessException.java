@@ -1,6 +1,7 @@
 package com.luckyseven.backend.global.error.exception;
 
 import com.luckyseven.backend.global.error.ErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
