@@ -25,7 +25,9 @@ public class ChatRoomService {
         if (name == null || name.isBlank()) {
             throw new BusinessException(INVALID_CHAT_ROOM_NAME);
         }
-        chatRoomRepository.save(new ChatRoom(name));
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setName(name);
+        chatRoomRepository.save(chatRoom);
     }
 
     public List<ChatRoomResponse> findAll() {

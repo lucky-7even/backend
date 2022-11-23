@@ -38,7 +38,8 @@ public class ChatRoomController {
     }
 
     @PostMapping
-    public void addChatRoom(@Valid ChatRoomSaveRequest chatRoomSaveRequest) {
+    public Long addChatRoom(@Valid ChatRoomSaveRequest chatRoomSaveRequest) {
         chatRoomService.save(chatRoomSaveRequest.getName());
+        return 1L;
     }
 }

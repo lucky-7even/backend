@@ -1,26 +1,16 @@
-server:
-  port: 5000
 
 spring:
-  profiles:
-    default: prod
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://awseb-e-2i2yqpaekr-stack-awsebrdsdatabase-yjwqd5ap0ugz.c9huyxklljow.ap-northeast-2.rds.amazonaws.com:3306/luckyseven
-    username: admin
-    password: rejin0421
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
     show-sql: true
-
 jwt:
   header: Authorization
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
@@ -34,3 +24,5 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: ERROR
+server:
+  port: 8080

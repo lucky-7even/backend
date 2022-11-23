@@ -69,9 +69,9 @@ public class ChatMessage {
     @Override
     public String toString() {
         return "ChatMessage{" +
-          "type=" + type +
-          ", content='" + content + '\'' +
-          ", sender='" + sender + '\'' +
-          '}';
+            "type=" + type +
+            ", content='" + content + '\'' +
+            ", sender='" + sender + '\'' +
+            '}';
     }
 }

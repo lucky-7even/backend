@@ -14,26 +14,29 @@ public class ChatRoom {
     private static final int VALID_HOUR = 3;
 
     @Id @GeneratedValue
-    private String id;
+    private Long id;
 
     @NotNull
     @Column(length = 50)
     private String name;
 
-    protected ChatRoom() {
+    public ChatRoom() {
     }
 
-    public ChatRoom(String name) {
-        this.id = UUID.randomUUID().toString();
-        this.name = name;
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

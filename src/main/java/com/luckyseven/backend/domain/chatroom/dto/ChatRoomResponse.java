@@ -3,7 +3,7 @@ package com.luckyseven.backend.domain.chatroom.dto;
 import com.luckyseven.backend.domain.chatroom.entity.ChatRoom;
 
 public class ChatRoomResponse {
-    private final String id;
+    private final Long id;
     private final String name;
 
     public ChatRoomResponse(ChatRoom chatRoom) {
@@ -11,7 +11,7 @@ public class ChatRoomResponse {
         this.name = chatRoom.getName();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

@@ -23,8 +23,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.security:spring-security-messaging:5.4.6'
-    implementation 'org.springframework:spring-messaging:5.3.9'
+//    implementation 'org.springframework.security:spring-security-messaging'
+    implementation 'org.springframework:spring-messaging'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -36,7 +36,7 @@ dependencies {
     // 스웨거, spring security
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
@@ -48,6 +48,7 @@ dependencies {
 
     //stringUtils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
