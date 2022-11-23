@@ -30,19 +30,14 @@ public class ProductController {
 	public ProductController(ProductService productService) {
 		this.productService = productService;
 	}
-	/*
-	- 페이지네이션이 호출되는 부분
-	1. GET - 물품 전체 시 리스트 조회 /api/products
-	2. GET - 물품검색 시 리스트 조회 /api/products?name={value}
-	3. GET - 카테고리 클릭 시 리스트 조회 /api/products?categories={value}
- 	*/
+
 	@GetMapping("products")
-	@ApiOperation(value = "물품 전체 리스트, 검색 조회")
+	@ApiOperation(value = "물품 전체 리스트 조회, 물품 검색 리스트 조회, 카테고리 클릭 시 리스트 조회")
 	public CommonApiResponse<List<ProductResponse>> products(
+		@RequestParam Long id,
+		@RequestParam int size,
 		@RequestParam(required = false) String name,
-		@RequestParam(required = false) Category category,
-		@RequestParam(required = false) Long id,
-		@RequestParam(required = false) int size) {
+		@RequestParam(required = false) Category category){
 		if (category != null) {
 			return of(
 				productService.findByIdLessThanAndCategoryOrderByIdDesc(id, category, PageRequest.of(0, size))
@@ -63,8 +58,7 @@ public class ProductController {
 			productService.findByIdLessThanOrderByIdDesc(id, PageRequest.of(0, size))
 				.stream()
 				.map(ProductResponse::new)
-				.collect(Collectors.toList()
-				)
+				.collect(Collectors.toList())
 		);
 	}
 
