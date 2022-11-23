@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +38,14 @@ public class ProductController {
  	*/
 	@GetMapping("products")
 	@ApiOperation(value = "물품 전체 리스트, 검색 조회")
-	public CommonApiResponse<List<ProductResponse>> products(@RequestParam(required = false) String name, @RequestParam(required = false) Category category) {
+	public CommonApiResponse<List<ProductResponse>> products(
+		@RequestParam(required = false) String name,
+		@RequestParam(required = false) Category category,
+		@RequestParam(required = false) Long id,
+		@RequestParam(required = false) int size) {
 		if (category != null) {
 			return of(
-				productService.findByCategory(category)
+				productService.findByIdLessThanAndCategoryOrderByIdDesc(id, category, PageRequest.of(0, size))
 					.stream()
 					.map(ProductResponse::new)
 					.collect(Collectors.toList())
@@ -48,14 +53,14 @@ public class ProductController {
 		}
 		else if (name != null) {
 			return of(
-				productService.findByNameContains(name)
+				productService.findByIdLessThanAndNameContainsOrderByIdDesc(id, name, PageRequest.of(0, size))
 					.stream()
 					.map(ProductResponse::new)
 					.collect(Collectors.toList())
 			);
 		}
 		return of(
-			productService.findAll()
+			productService.findByIdLessThanOrderByIdDesc(id, PageRequest.of(0, size))
 				.stream()
 				.map(ProductResponse::new)
 				.collect(Collectors.toList()

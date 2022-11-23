@@ -4,6 +4,8 @@ import static com.luckyseven.backend.global.error.ErrorCode.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +36,8 @@ public class ProductService {
 		);
 	}
 
-	public List<Product> findAll() {
-		return productRepository.findAll();
+	public Page<Product> findByIdLessThanOrderByIdDesc(Long id, PageRequest pageRequest) {
+		return productRepository.findByIdLessThanOrderByIdDesc(id, pageRequest);
 	}
 
 	public Product findOne(Long id) {
@@ -43,11 +45,11 @@ public class ProductService {
 			.orElseThrow(() -> new BusinessException(PRODUCT_NOT_FOUND));
 	}
 
-	public List<Product> findByNameContains(String name) {
-		return productRepository.findByNameContains(name);
+	public List<Product> findByIdLessThanAndNameContainsOrderByIdDesc(Long id, String name, PageRequest pageRequest) {
+		return productRepository.findByIdLessThanAndNameContainsOrderByIdDesc(id, name, pageRequest);
 	}
 
-	public List<Product> findByCategory(Category category) {
-		return productRepository.findByCategory(category);
+	public Page<Product> findByIdLessThanAndCategoryOrderByIdDesc(Long id, Category category, PageRequest pageRequest) {
+		return productRepository.findByIdLessThanAndCategoryOrderByIdDesc(id, category, pageRequest);
 	}
 }

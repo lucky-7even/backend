@@ -10,7 +10,7 @@ import lombok.Setter;
 public class ProductResponse {
 
 	@ApiModelProperty(value = "PK", required = true)
-	private Long productId;
+	private Long id;
 
 	@ApiModelProperty(value = "대여하는 유저", required = true)
 	private Long memberId;
