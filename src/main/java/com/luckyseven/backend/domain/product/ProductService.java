@@ -2,7 +2,6 @@ package com.luckyseven.backend.domain.product;
 
 import static com.luckyseven.backend.global.error.ErrorCode.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
