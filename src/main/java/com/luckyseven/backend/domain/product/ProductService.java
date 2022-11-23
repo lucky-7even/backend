@@ -2,6 +2,7 @@ package com.luckyseven.backend.domain.product;
 
 import static com.luckyseven.backend.global.error.ErrorCode.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -45,5 +46,9 @@ public class ProductService {
 
 	public List<Product> findByNameContains(String name) {
 		return productRepository.findByNameContains(name);
+	}
+
+	public List<Product> findByCategory(Category category) {
+		return productRepository.findByCategory(category);
 	}
 }

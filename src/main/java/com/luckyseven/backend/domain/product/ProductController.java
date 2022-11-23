@@ -29,11 +29,24 @@ public class ProductController {
 	public ProductController(ProductService productService) {
 		this.productService = productService;
 	}
-
+	/*
+	- 페이지네이션이 호출되는 부분
+	1. GET - 물품 전체 시 리스트 조회 /api/products
+	2. GET - 물품검색 시 리스트 조회 /api/products?name={value}
+	3. GET - 카테고리 클릭 시 리스트 조회 /api/products?categories={value}
+ 	*/
 	@GetMapping("products")
 	@ApiOperation(value = "물품 전체 리스트, 검색 조회")
-	public CommonApiResponse<List<ProductResponse>> products(@RequestParam(required = false) String name) {
-		if (name != null) {
+	public CommonApiResponse<List<ProductResponse>> products(@RequestParam(required = false) String name, @RequestParam(required = false) Category category) {
+		if (category != null) {
+			return of(
+				productService.findByCategory(category)
+					.stream()
+					.map(ProductResponse::new)
+					.collect(Collectors.toList())
+			);
+		}
+		else if (name != null) {
 			return of(
 				productService.findByNameContains(name)
 					.stream()
