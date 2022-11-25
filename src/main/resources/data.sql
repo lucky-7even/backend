@@ -1,4 +1,4 @@
-INSERT INTO MEMBER VALUES (1L, 'Jongho', 37.123, 127.123,  'test@naver.com', '12345678', 'profileImage');
+INSERT INTO MEMBER(member_id, email, is_social, lat, lng, nickname, passwd, profile_image) VALUES (1L, 'test@naver.com', false, 37.123, 127.123, 'Jongho', '12345678', 'profileImage');
 
 INSERT INTO PRODUCT(id, category, name, description, price, product_status, region, member_id) VALUES (1L, 'LIVING', '설명1', '물건1', 10000, 'WAITING', 'BONGCHEON', 1L);
 INSERT INTO PRODUCT(id, category, name, description, price, product_status, region, member_id) VALUES (2L, 'CLOTHES', '설명2', '물건2', 20000, 'WAITING', 'BONGCHEON', 1L);

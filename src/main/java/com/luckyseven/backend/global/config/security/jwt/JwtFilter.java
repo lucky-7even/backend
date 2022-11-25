@@ -41,14 +41,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 String jwt = resolveToken(request); //request에서 jwt 토큰을 꺼낸다.
 
                 if (jwt == null) {
-                    log.error("jwt 값을 가져올 수 없습니다");
+                    // log.error("jwt 값을 가져올 수 없습니다");
                     request.setAttribute("exception", ErrorCode.NO_TOKEN.getCode());
                     filterChain.doFilter(request, response);
                     return;
                 }
 
                 if (StringUtils.isNotBlank(jwt) && tokenProvider.validateToken(jwt)) {
-                    Authentication authentication = tokenProvider.getAuthentication(request, jwt); //authentication 획득
+                    Authentication authentication = tokenProvider.getAuthentication(jwt); //authentication 획득
 
                     //Security 세션에서 계속 사용하기 위해 SecurityContext에 Authentication 등록
                     SecurityContextHolder.getContext().setAuthentication(authentication);

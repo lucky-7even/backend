@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("test")
-public class TestController {
+@Api(tags = "EB 헬스체크 컨트롤러(무시해주세용)")
+public class HealthCheckController {
 
     @GetMapping
     public ResponseEntity<String> test() {

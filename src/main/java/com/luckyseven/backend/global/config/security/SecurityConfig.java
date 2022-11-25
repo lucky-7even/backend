@@ -1,7 +1,10 @@
 package com.luckyseven.backend.global.config.security;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.luckyseven.backend.global.config.security.jwt.JwtAccessDeniedHandler;
 import com.luckyseven.backend.global.config.security.jwt.JwtAuthenticationEntryPoint;
@@ -72,7 +78,7 @@ public class SecurityConfig {
                 .antMatchers("/api/**").anonymous()
 
 
-            // 여기서부터 uri 권한 설정
+                // 여기서부터 uri 권한 설정
                 /*.antMatchers("").authenticated()*/
 
                 .anyRequest().permitAll()
@@ -80,5 +86,27 @@ public class SecurityConfig {
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
+    }
+
+    /** cors 설정 configuration bean */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        //로컬 react 개발 환경
+        configuration.addAllowedOriginPattern("*");
+        //서버 react 프론트 환경
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowedMethods(Arrays.asList(HttpMethod.POST.name(),
+                HttpMethod.GET.name(), HttpMethod.PATCH.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name(), HttpMethod.OPTIONS.name()));
+        configuration.addExposedHeader("x-auth-token");
+        //내 서버의 응답 json 을 javascript에서 처리할수 있게 하는것(axios 등)
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
