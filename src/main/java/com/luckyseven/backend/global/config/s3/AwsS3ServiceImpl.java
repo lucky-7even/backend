@@ -44,7 +44,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
                 throw new InternalServerException(ErrorCode.FILE_UPLOAD_FAILED);
             }
 
-            fileNameList.add(fileName);
+            fileNameList.add(amazonS3.getUrl(bucket, fileName).toString());
         });
 
         return fileNameList;
