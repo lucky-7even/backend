@@ -1,9 +1,14 @@
 package com.luckyseven.backend.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.luckyseven.backend.domain.member.entity.Member;
+import com.luckyseven.backend.domain.member.Member;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +35,7 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
-                .password(member.getPassword())
+                .password(member.getPasswd())
                 .profileImage(member.getProfileImage())
                 .isSocial(member.isSocial())
                 .build();
@@ -40,7 +45,7 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())
-                .password(member.getPassword())
+                .password(member.getPasswd())
                 .profileImage(member.getProfileImage())
                 .isSocial(member.isSocial())
                 .accessToken(tokenResponseDto.getAccessToken())

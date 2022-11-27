@@ -1,12 +1,12 @@
 package com.luckyseven.backend.domain.member.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

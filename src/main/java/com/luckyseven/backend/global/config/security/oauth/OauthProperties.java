@@ -1,11 +1,12 @@
 package com.luckyseven.backend.global.config.security.oauth;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @ConfigurationProperties(prefix = "oauth2")

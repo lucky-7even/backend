@@ -1,17 +1,23 @@
 package com.luckyseven.backend.domain.member;
 
+import javax.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.luckyseven.backend.domain.member.dto.LoginDto;
 import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
 import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
 import com.luckyseven.backend.global.config.CommonApiResponse;
 import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,9 +1,9 @@
 package com.luckyseven.backend.global.config.security.oauth;
 
-import lombok.NoArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class OauthAdapter {

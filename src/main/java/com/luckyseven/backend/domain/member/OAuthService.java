@@ -1,19 +1,10 @@
 package com.luckyseven.backend.domain.member;
 
-import com.luckyseven.backend.domain.member.dto.UserProfile;
-import com.luckyseven.backend.global.config.security.oauth.InMemoryProviderRepository;
-import com.luckyseven.backend.global.config.security.oauth.OauthAttributes;
-import com.luckyseven.backend.global.config.security.oauth.OauthProvider;
-import com.luckyseven.backend.global.config.security.oauth.dto.KakaoUserInfo;
-import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
-import com.luckyseven.backend.domain.member.entity.Member;
-import com.luckyseven.backend.global.config.security.dto.OauthTokenResponse;
-import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
-import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
-import com.luckyseven.backend.global.error.ErrorCode;
-import com.luckyseven.backend.global.error.exception.BadRequestException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,10 +23,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
+import com.luckyseven.backend.domain.member.dto.UserProfile;
+import com.luckyseven.backend.global.config.security.dto.OauthTokenResponse;
+import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
+import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
+import com.luckyseven.backend.global.config.security.oauth.InMemoryProviderRepository;
+import com.luckyseven.backend.global.config.security.oauth.OauthAttributes;
+import com.luckyseven.backend.global.config.security.oauth.OauthProvider;
+import com.luckyseven.backend.global.config.security.oauth.dto.KakaoUserInfo;
+import com.luckyseven.backend.global.error.ErrorCode;
+import com.luckyseven.backend.global.error.exception.BadRequestException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -98,7 +99,7 @@ public class OAuthService {
         Member member = Member.builder()
                 .nickname(userProfile.getName())
                 .email(userProfile.getEmail())
-                .password(passwordEncoder.encode("social"))
+                .passwd(passwordEncoder.encode("social"))
                 .profileImage(userProfile.getImageUrl())
                 .isSocial(true)
                 .build();
@@ -193,7 +194,7 @@ public class OAuthService {
         return Member.builder()
                 .nickname(nickName)
                 .email(email)
-                .password(passwordEncoder.encode("social"))
+                .passwd(passwordEncoder.encode("social"))
                 .profileImage(imageUrl)
                 .isSocial(true)
                 .build();

@@ -1,8 +1,8 @@
 package com.luckyseven.backend.global.config.s3;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AwsS3Service {
 

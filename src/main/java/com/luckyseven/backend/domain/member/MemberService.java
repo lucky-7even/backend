@@ -1,15 +1,9 @@
 package com.luckyseven.backend.domain.member;
 
-import com.luckyseven.backend.domain.member.dto.LoginDto;
-import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
-import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
-import com.luckyseven.backend.domain.member.entity.Member;
-import com.luckyseven.backend.global.config.CommonApiResponse;
-import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
-import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
-import com.luckyseven.backend.global.error.ErrorCode;
-import com.luckyseven.backend.global.error.exception.BadRequestException;
-import lombok.RequiredArgsConstructor;
+import static com.luckyseven.backend.global.error.ErrorCode.*;
+
+import java.util.Optional;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.luckyseven.backend.domain.member.dto.LoginDto;
+import com.luckyseven.backend.domain.member.dto.MemberRequestDto;
+import com.luckyseven.backend.domain.member.dto.MemberResponseDto;
+import com.luckyseven.backend.global.config.CommonApiResponse;
+import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
+import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
+import com.luckyseven.backend.global.error.ErrorCode;
+import com.luckyseven.backend.global.error.exception.BadRequestException;
+import com.luckyseven.backend.global.error.exception.BusinessException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -44,14 +48,13 @@ public class MemberService {
         Member member = Member.builder()
                 .nickname(memberRequestDto.getNickname())
                 .email(memberRequestDto.getEmail())
-                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
+                .passwd(passwordEncoder.encode(memberRequestDto.getPassword()))
                 .isSocial(false)
                 .build();
         memberRepository.save(member);
-
         return MemberResponseDto.of(member);
     }
-    
+
     // 일반 로그인
     @Transactional
     public ResponseEntity<CommonApiResponse<MemberResponseDto>> loginMember(LoginDto loginDto) {
@@ -101,5 +104,10 @@ public class MemberService {
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDto.getAccessToken());
 
         return new ResponseEntity<>(CommonApiResponse.of(tokenResponseDto), httpHeaders, HttpStatus.OK);
+    }
+
+    public Member findOne(Long id) {
+        return memberRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
     }
 }
