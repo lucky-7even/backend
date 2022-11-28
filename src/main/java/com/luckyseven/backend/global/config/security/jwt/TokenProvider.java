@@ -1,14 +1,14 @@
 package com.luckyseven.backend.global.config.security.jwt;
 
-import com.luckyseven.backend.global.config.redis.RedisService;
-import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
-import com.luckyseven.backend.global.error.ErrorCode;
-import com.luckyseven.backend.global.error.exception.BadRequestException;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Key;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,13 +21,21 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
-import javax.servlet.http.HttpServletRequest;
-import java.security.Key;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import com.luckyseven.backend.global.config.redis.RedisService;
+import com.luckyseven.backend.global.config.security.dto.TokenResponseDto;
+import com.luckyseven.backend.global.error.ErrorCode;
+import com.luckyseven.backend.global.error.exception.BadRequestException;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor

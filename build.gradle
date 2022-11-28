@@ -63,6 +63,9 @@ dependencies {
 
     //AWS S3
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
+
+    // local h2
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

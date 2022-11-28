@@ -1,10 +1,11 @@
 package com.luckyseven.backend.global.error;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import static org.springframework.http.HttpStatus.*;
+
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
@@ -57,7 +58,10 @@ public enum ErrorCode {
     /* Member 관련 오류 */
     MEMBER_ALREADY_EXIST(BAD_REQUEST, "M002","이미 가입된 유저입니다"),
     MEMBER_NOT_FOUND(NOT_FOUND, "M003","해당 유저 정보를 찾을 수 없습니다"),
-    COUNTRY_NOT_FOUND(NOT_FOUND, "M004", "해당 국가를 찾을 수 없습니다");
+    COUNTRY_NOT_FOUND(NOT_FOUND, "M004", "해당 국가를 찾을 수 없습니다"),
+
+    /* PRODUCT 관련 오류 */
+    PRODUCT_NOT_FOUND(NOT_FOUND, "P001","해당 물품 정보를 찾을 수 없습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

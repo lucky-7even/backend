@@ -1,7 +1,7 @@
 package com.luckyseven.backend.global.config.security;
 
-import com.luckyseven.backend.global.config.security.jwt.*;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,8 +17,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import com.luckyseven.backend.global.config.security.jwt.JwtAccessDeniedHandler;
+import com.luckyseven.backend.global.config.security.jwt.JwtAuthenticationEntryPoint;
+import com.luckyseven.backend.global.config.security.jwt.JwtSecurityConfig;
+import com.luckyseven.backend.global.config.security.jwt.TokenProvider;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +51,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -70,6 +75,8 @@ public class SecurityConfig {
                 .antMatchers("/swagger-resources/**").anonymous()
                 .antMatchers("/v2/**").anonymous()
                 .antMatchers("/csrf").anonymous()
+                .antMatchers("/api/**").anonymous()
+
 
                 // 여기서부터 uri 권한 설정
                 /*.antMatchers("").authenticated()*/

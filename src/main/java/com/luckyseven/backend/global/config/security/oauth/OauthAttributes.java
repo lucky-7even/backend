@@ -1,9 +1,9 @@
 package com.luckyseven.backend.global.config.security.oauth;
 
-import com.luckyseven.backend.domain.member.dto.UserProfile;
-
 import java.util.Arrays;
 import java.util.Map;
+
+import com.luckyseven.backend.domain.member.dto.UserProfile;
 
 public enum OauthAttributes {
     NAVER("naver") {
