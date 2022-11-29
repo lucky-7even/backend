@@ -1,14 +1,13 @@
 package com.luckyseven.backend.domain.member.entity;
 
+import com.luckyseven.backend.domain.product_demand.entity.ProductDemand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,12 +27,12 @@ public class Member {
 
     private String password;
 
-    // 경도
-    private Double lat;
-
-    // 위도
-    private Double lng;
+    // 동네
+    private String location;
 
     // 소셜 회원가입여부
     private boolean isSocial;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ProductDemand> productDemandList;
 }
