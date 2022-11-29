@@ -57,7 +57,10 @@ public enum ErrorCode {
     /* Member 관련 오류 */
     MEMBER_ALREADY_EXIST(BAD_REQUEST, "M002","이미 가입된 유저입니다"),
     MEMBER_NOT_FOUND(NOT_FOUND, "M003","해당 유저 정보를 찾을 수 없습니다"),
-    COUNTRY_NOT_FOUND(NOT_FOUND, "M004", "해당 국가를 찾을 수 없습니다");
+    COUNTRY_NOT_FOUND(NOT_FOUND, "M004", "해당 국가를 찾을 수 없습니다"),
+
+    /*ProductDemand 관련 오류*/
+    PRODUCT_DEMAND_NOT_FOUND(NOT_FOUND, "PD001", "해당 물품 요청 정보를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

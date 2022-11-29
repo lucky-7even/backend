@@ -32,4 +32,19 @@ public class ProductDemandController {
             @RequestPart(required = false) List<MultipartFile> multipartFiles) {
         return ResponseEntity.ok(CommonApiResponse.of(productDemandService.makeProdcutDemands(authentication.getName(), productDemandRequestDto, multipartFiles)));
     }
+    
+    @GetMapping
+    @ApiOperation(value = "물품 요청 전체보기")
+    public ResponseEntity<CommonApiResponse<List<ProductDemandResponseDto>>> showProductDemands() {
+        return ResponseEntity.ok(CommonApiResponse.of(productDemandService.showProductDemands()));
+    }
+    
+    @PostMapping("{productDemandId}")
+    @ApiOperation(value = "물품 요청글 좋아요")
+    public ResponseEntity<String> likeProductDemand(
+            @ApiIgnore Authentication authentication,
+            @PathVariable Long productDemandId) {
+        productDemandService.likeProductDemand(authentication.getName(), productDemandId);
+        return ResponseEntity.ok(productDemandId + "번 물품의 좋아요 및 취소 처리가 완료되었습니다.");
+    }
 }

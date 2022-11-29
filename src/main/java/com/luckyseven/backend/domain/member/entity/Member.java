@@ -1,6 +1,7 @@
 package com.luckyseven.backend.domain.member.entity;
 
 import com.luckyseven.backend.domain.product_demand.entity.ProductDemand;
+import com.luckyseven.backend.domain.product_demand.entity.ProductDemandLikes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,4 +36,7 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<ProductDemand> productDemandList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ProductDemandLikes> productDemandLikesList;
 }

@@ -39,4 +39,7 @@ public class ProductDemand extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "productDemand", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProductDemandImages> productDemandImagesList;
+
+    @OneToMany(mappedBy = "productDemand", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ProductDemandLikes> productDemandLikesList;
 }
