@@ -1,14 +1,13 @@
 package com.luckyseven.backend.domain.product_demand.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.luckyseven.backend.domain.product_demand.ProductDemandLikesRepository;
 import com.luckyseven.backend.domain.product_demand.entity.ProductDemand;
 import com.luckyseven.backend.domain.product_demand.entity.ProductDemandImages;
-import com.luckyseven.backend.domain.product_demand.entity.ProductDemandLikes;
 import com.luckyseven.backend.domain.product_demand.model.Category;
 import com.luckyseven.backend.global.util.Time;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +42,8 @@ public class ProductDemandResponseDto {
 
     private Long likes;
 
+    private List<ProductDemandReplyResponseDto> productDemandReplyResponseDtos;
+
     public ProductDemandResponseDto(ProductDemand productDemand) {
         this.productDemandId = productDemand.getProductDemandId();
         this.category = productDemand.getCategory();
@@ -55,7 +56,9 @@ public class ProductDemandResponseDto {
                 .stream().map(ProductDemandImages::getProductImageUrl).collect(Collectors.toList());
         this.buyer = productDemand.getMember().getNickname();
         this.buyerLocation = productDemand.getMember().getLocation();
-        this.term = Time.calculateTime(java.sql.Timestamp.valueOf(productDemand.getCreatedAt()));
+        this.term = Time.calculateTime(Timestamp.valueOf(productDemand.getCreatedAt()));
+        this.productDemandReplyResponseDtos = productDemand.getProductDemandReplyList()
+                .stream().map(ProductDemandReplyResponseDto::of).collect(Collectors.toList());
     }
 
     public static ProductDemandResponseDto of(ProductDemand productDemand, List<String> productImagesUrls) {

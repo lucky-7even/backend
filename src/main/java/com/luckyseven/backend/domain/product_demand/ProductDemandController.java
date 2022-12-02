@@ -1,5 +1,7 @@
 package com.luckyseven.backend.domain.product_demand;
 
+import com.luckyseven.backend.domain.product_demand.dto.ProductDemandReplyRequestDto;
+import com.luckyseven.backend.domain.product_demand.dto.ProductDemandReplyResponseDto;
 import com.luckyseven.backend.domain.product_demand.dto.ProductDemandRequestDto;
 import com.luckyseven.backend.domain.product_demand.dto.ProductDemandResponseDto;
 import com.luckyseven.backend.global.config.CommonApiResponse;
@@ -46,5 +48,14 @@ public class ProductDemandController {
             @PathVariable Long productDemandId) {
         productDemandService.likeProductDemand(authentication.getName(), productDemandId);
         return ResponseEntity.ok(productDemandId + "번 물품의 좋아요 및 취소 처리가 완료되었습니다.");
+    }
+
+    @PostMapping("{productDemandId}/replies")
+    @ApiOperation(value = "물품 요청 댓글 작성")
+    public ResponseEntity<CommonApiResponse<ProductDemandReplyResponseDto>> makeProductDemandReply(
+            @ApiIgnore Authentication authentication,
+            @PathVariable Long productDemandId,
+            @RequestBody ProductDemandReplyRequestDto productDemandReplyRequestDto) {
+        return ResponseEntity.ok(CommonApiResponse.of(productDemandService.makeProductDemandReply(authentication.getName(), productDemandId, productDemandReplyRequestDto)));
     }
 }
