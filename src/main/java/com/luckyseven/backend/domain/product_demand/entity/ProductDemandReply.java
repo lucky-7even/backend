@@ -1,6 +1,6 @@
 package com.luckyseven.backend.domain.product_demand.entity;
 
-import com.luckyseven.backend.domain.member.Member;
+import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.global.config.entity.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

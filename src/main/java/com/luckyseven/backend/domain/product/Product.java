@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.luckyseven.backend.domain.member.Member;
+import com.luckyseven.backend.domain.member.entity.Member;
 
 import lombok.Getter;
 

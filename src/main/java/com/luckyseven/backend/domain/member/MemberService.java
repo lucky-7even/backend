@@ -4,6 +4,7 @@ import static com.luckyseven.backend.global.error.ErrorCode.*;
 
 import java.util.Optional;
 
+import com.luckyseven.backend.domain.member.entity.Member;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class MemberService {
         Member member = Member.builder()
                 .nickname(memberRequestDto.getNickname())
                 .email(memberRequestDto.getEmail())
-                .passwd(passwordEncoder.encode(memberRequestDto.getPassword()))
+                .password(passwordEncoder.encode(memberRequestDto.getPassword()))
                 .isSocial(false)
                 .build();
         memberRepository.save(member);

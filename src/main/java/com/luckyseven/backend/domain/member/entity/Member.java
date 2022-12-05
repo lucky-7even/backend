@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.member;
+package com.luckyseven.backend.domain.member.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +33,7 @@ public class Member {
 
     private String email;
 
-    private String passwd;
+    private String password;
 
     // 동네
     private String location;
