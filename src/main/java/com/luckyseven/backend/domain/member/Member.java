@@ -6,10 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.luckyseven.backend.domain.product_demand.entity.ProductDemand;
+import com.luckyseven.backend.domain.product_demand.entity.ProductDemandLikes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +25,6 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private Long memberId;
 
     private String nickname;
@@ -31,9 +35,14 @@ public class Member {
 
     private String passwd;
 
-    private Double lat;
-
-    private Double lng;
+    // 동네
+    private String location;
 
     private boolean isSocial;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ProductDemand> productDemandList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ProductDemandLikes> productDemandLikesList;
 }
