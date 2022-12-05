@@ -64,5 +64,4 @@ public class AwsS3Controller {
         awsS3ServiceImpl.deleteImage(fileName);
         return CommonApiResponse.of(null);
     }
-
 }
