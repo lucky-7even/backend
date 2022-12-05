@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.luckyseven.backend.domain.member.Member;
+import com.luckyseven.backend.domain.member.entity.Member;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class MemberRequestDto {
         return Member.builder()
                 .nickname(memberRequestDto.getNickname())
                 .email(memberRequestDto.getEmail())
-                .passwd(memberRequestDto.getPassword())
+                .password(memberRequestDto.getPassword())
                 .build();
     }
 }

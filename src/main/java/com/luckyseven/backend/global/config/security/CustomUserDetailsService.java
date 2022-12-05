@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckyseven.backend.domain.member.Member;
+import com.luckyseven.backend.domain.member.entity.Member;
 import com.luckyseven.backend.domain.member.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private User createUser(Member member) {
-        return new User(member.getEmail(), member.getPasswd(), authorities());
+        return new User(member.getEmail(), member.getPassword(), authorities());
     }
 
     private static Collection<? extends GrantedAuthority> authorities() {

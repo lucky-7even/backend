@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.member;
+package com.luckyseven.backend.domain.member.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +13,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-<<<<<<< HEAD:src/main/java/com/luckyseven/backend/domain/member/Member.java
-=======
 import javax.persistence.*;
 import java.util.List;
 
->>>>>>> feature/buyer:src/main/java/com/luckyseven/backend/domain/member/entity/Member.java
 @Entity
 @Getter
 @AllArgsConstructor
@@ -28,7 +25,6 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private Long memberId;
 
     private String nickname;
@@ -37,16 +33,10 @@ public class Member {
 
     private String email;
 
-    private String passwd;
+    private String password;
 
-<<<<<<< HEAD:src/main/java/com/luckyseven/backend/domain/member/Member.java
-    private Double lat;
-
-    private Double lng;
-=======
     // 동네
     private String location;
->>>>>>> feature/buyer:src/main/java/com/luckyseven/backend/domain/member/entity/Member.java
 
     private boolean isSocial;
 

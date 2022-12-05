@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import com.luckyseven.backend.domain.member.entity.Member;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -99,7 +100,7 @@ public class OAuthService {
         Member member = Member.builder()
                 .nickname(userProfile.getName())
                 .email(userProfile.getEmail())
-                .passwd(passwordEncoder.encode("social"))
+                .password(passwordEncoder.encode("social"))
                 .profileImage(userProfile.getImageUrl())
                 .isSocial(true)
                 .build();
@@ -194,7 +195,7 @@ public class OAuthService {
         return Member.builder()
                 .nickname(nickName)
                 .email(email)
-                .passwd(passwordEncoder.encode("social"))
+                .password(passwordEncoder.encode("social"))
                 .profileImage(imageUrl)
                 .isSocial(true)
                 .build();
