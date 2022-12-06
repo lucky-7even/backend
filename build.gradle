@@ -48,9 +48,6 @@ dependencies {
 
     //stringUtils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-
-    // local h2
-    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

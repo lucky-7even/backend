@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ChatRoom {
 
-    @Id
+    @Id @GeneratedValue
     private String id;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)

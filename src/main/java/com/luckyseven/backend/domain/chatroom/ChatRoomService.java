@@ -17,5 +17,4 @@ public class ChatRoomService {
     public void save(Long productId, Long userId1, Long userId2) {  // userId1 -> 대여하는 사람, userId2 -> 대여받는 사람
         chatRoomRepository.save(new ChatRoom(productId, userId1, userId2));
     }
-
 }
