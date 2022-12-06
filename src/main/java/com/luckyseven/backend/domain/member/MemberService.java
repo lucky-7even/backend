@@ -66,16 +66,10 @@ public class MemberService {
             throw new BadRequestException(ErrorCode.SOCIAL_ALREADY_EXIST);
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         HttpHeaders httpHeaders = new HttpHeaders();
-        TokenResponseDto tokenResponseDTO = tokenProvider.generateToken(authentication.getName());
+        TokenResponseDto tokenResponseDTO = tokenProvider.generateToken(loginDto.getEmail());
 
-        Member member = memberRepository.findByEmail(authentication.getName())
+        Member member = memberRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new BadRequestException(ErrorCode.MEMBER_NOT_FOUND));
         httpHeaders.add("Authorization", "Bearer " + tokenResponseDTO.getAccessToken());
 
