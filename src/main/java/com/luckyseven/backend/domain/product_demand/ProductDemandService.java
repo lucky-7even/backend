@@ -20,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -94,8 +97,7 @@ public class ProductDemandService {
 
         // 요청들 답글들 set
         for (int i = 0; i < productDemands.size(); i++) {
-            List<ProductDemandReply> productDemandReplies = productDemandReplyCustomRepository.findAllByProductDemand(productDemandRepository.findById(productDemands.get(i).getProductDemandId())
-                    .orElseThrow());
+            List<ProductDemandReply> productDemandReplies = productDemandReplyCustomRepository.findAllByProductDemand(productDemandRepository.findById(productDemands.get(i).getProductDemandId()).orElseThrow());
             List<ProductDemandReplyResponseDto> productDemandReplyResponseDtos = new ArrayList<>();
             Map<Long, ProductDemandReplyResponseDto> map = new HashMap<>();
 
@@ -124,8 +126,9 @@ public class ProductDemandService {
         ProductDemandReply parent = null;
         if (productDemandReplyRequestDto.getProductDemandReplyId() != null) {
             parent = productDemandReplyRepository.findByProductDemandReplyId(productDemandReplyRequestDto.getProductDemandReplyId());
-            if (parent == null) throw new BadRequestException(ErrorCode.PRODUCT_DEMAND_REPLY_NOT_FOUND);
-            else if (!Objects.equals(parent.getProductDemand().getProductDemandId(), productDemandId)) {
+            if (parent == null) {
+                throw new BadRequestException(ErrorCode.PRODUCT_DEMAND_REPLY_NOT_FOUND);
+            } else if (parent.getProductDemand().getProductDemandId() != productDemandId) {
                 throw new BadRequestException(ErrorCode.PRODUCT_DEMAND_REPLY_PARENT_CHILD_NOT_VALID);
             }
         }
