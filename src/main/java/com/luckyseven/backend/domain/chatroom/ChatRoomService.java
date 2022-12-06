@@ -1,16 +1,9 @@
 package com.luckyseven.backend.domain.chatroom;
 
-import static com.luckyseven.backend.global.error.ErrorCode.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckyseven.backend.domain.chatroom.dto.ChatRoomResponse;
 import com.luckyseven.backend.domain.chatroom.entity.ChatRoom;
-import com.luckyseven.backend.global.error.exception.BusinessException;
 
 @Service
 @Transactional
@@ -21,16 +14,8 @@ public class ChatRoomService {
         this.chatRoomRepository = chatRoomRepository;
     }
 
-    public void save(String name) {
-        if (name == null || name.isBlank()) {
-            throw new BusinessException(INVALID_CHAT_ROOM_NAME);
-        }
-        chatRoomRepository.save(new ChatRoom(name));
+    public void save(Long productId, Long userId1, Long userId2) {  // userId1 -> 대여하는 사람, userId2 -> 대여받는 사람
+        chatRoomRepository.save(new ChatRoom(productId, userId1, userId2));
     }
 
-    public List<ChatRoomResponse> findAll() {
-        return chatRoomRepository.findAll().stream()
-                                 .map((chatRoom) -> new ChatRoomResponse(chatRoom))
-                                 .collect(Collectors.toList());
-    }
 }

@@ -1,47 +1,38 @@
 package com.luckyseven.backend.domain.chatroom.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-@Entity
-public class ChatRoom {
-    private static final int VALID_HOUR = 3;
+import com.luckyseven.backend.domain.chatmessage.entity.ChatMessage;
 
-    @Id @GeneratedValue
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter @Setter
+public class ChatRoom {
+
+    @Id
     private String id;
 
-    @NotNull
-    @Column(length = 50)
-    private String name;
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<ChatMessage> chatMessageList = new ArrayList<>();
 
     protected ChatRoom() {
     }
 
-    public ChatRoom(String name) {
-        this.id = UUID.randomUUID().toString();
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "ChatRoom{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+    public ChatRoom(Long productId, Long userId1, Long userId2) { // userId1 -> 대여하는 사람, userId2 -> 대여받는 사람
+        this.id = productId + "-" + userId1 + "-" + userId2;
     }
 
     @Override
