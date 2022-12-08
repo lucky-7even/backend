@@ -42,6 +42,7 @@ public class ProductController {
 		@RequestParam(required = false) String name,
 		@RequestParam(required = false) Category category){
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+		System.out.println("시발");
 
 		if (category != null) return ResponseEntity.ok(CommonApiResponse.of(productService.findCategoryProducts(category, pageable)));
 		else if (name != null) return ResponseEntity.ok(CommonApiResponse.of(productService.searchProducts(name, pageable)));
