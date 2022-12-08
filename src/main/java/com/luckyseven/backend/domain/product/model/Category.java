@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.product;
+package com.luckyseven.backend.domain.product.model;
 
 public enum Category {
 	// 카테고리 등록

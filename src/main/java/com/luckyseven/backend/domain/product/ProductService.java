@@ -3,53 +3,81 @@ package com.luckyseven.backend.domain.product;
 import static com.luckyseven.backend.global.error.ErrorCode.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.luckyseven.backend.domain.member.MemberRepository;
+import com.luckyseven.backend.domain.member.entity.Member;
+import com.luckyseven.backend.domain.product.dto.ProductRequest;
+import com.luckyseven.backend.domain.product.dto.ProductResponse;
+import com.luckyseven.backend.domain.product.entity.Product;
+import com.luckyseven.backend.domain.product.model.Category;
+import com.luckyseven.backend.domain.product.model.ProductStatus;
+import com.luckyseven.backend.global.error.exception.BadRequestException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luckyseven.backend.domain.member.MemberService;
-import com.luckyseven.backend.global.error.exception.BusinessException;
-
 @Service
+@RequiredArgsConstructor
 public class ProductService {
-
 	private final ProductRepository productRepository;
-	private final MemberService memberService;
+	private final MemberRepository memberRepository;
 
-	public ProductService(ProductRepository productRepository, MemberService memberService) {
-		this.productRepository = productRepository;
-		this.memberService = memberService;
-	}
-
+	// 물품 등록
 	@Transactional
-	public Product write(ProductRequest productRequest) {
-		return productRepository.save(
-			new Product(
-					memberService.findOne(productRequest.getMemberId()),
-					productRequest.getCategory(),
-					productRequest.getName(),
-					productRequest.getPrice(),
-					productRequest.getDescription()
-			)
-		);
+	public ProductResponse makeProduct(String email, ProductRequest productRequest) {
+		Member member = memberRepository.findByEmail(email)
+				.orElseThrow(() -> new BadRequestException(MEMBER_NOT_FOUND));
+
+		Product product = Product.builder()
+				.category(productRequest.getCategory())
+				.name(productRequest.getName())
+				.price(productRequest.getPrice())
+				.description(productRequest.getDescription())
+				.productStatus(ProductStatus.WAITING)
+				.member(member)
+				.build();
+		productRepository.save(product);
+
+		return ProductResponse.of(product);
 	}
 
-	public Page<Product> findByIdLessThanOrderByIdDesc(Long id, PageRequest pageRequest) {
-		return productRepository.findByIdLessThanOrderByIdDesc(id, pageRequest);
+	// 물품 상세 조회
+	@Transactional(readOnly = true)
+	public ProductResponse findProduct(Long productId) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new BadRequestException(PRODUCT_NOT_FOUND));
+		return ProductResponse.of(product);
 	}
 
-	public Product findOne(Long id) {
-		return productRepository.findById(id)
-			.orElseThrow(() -> new BusinessException(PRODUCT_NOT_FOUND));
+	// 물품 전체 조회
+	@Transactional(readOnly = true)
+	public List<ProductResponse> findProducts(Pageable pageable) {
+		Page<Product> products = productRepository.findAll(pageable);
+		return products.stream()
+				.map(ProductResponse::new)
+				.collect(Collectors.toList());
 	}
 
-	public List<Product> findByIdLessThanAndNameContainsOrderByIdDesc(Long id, String name, PageRequest pageRequest) {
-		return productRepository.findByIdLessThanAndNameContainsOrderByIdDesc(id, name, pageRequest);
+	// 물품 검색
+	@Transactional(readOnly = true)
+	public List<ProductResponse> searchProducts(String name, Pageable pageable) {
+		Page<Product> products = productRepository.findByNameContaining(name, pageable);
+		return products.stream()
+				.map(ProductResponse::new)
+				.collect(Collectors.toList());
 	}
 
-	public Page<Product> findByIdLessThanAndCategoryOrderByIdDesc(Long id, Category category, PageRequest pageRequest) {
-		return productRepository.findByIdLessThanAndCategoryOrderByIdDesc(id, category, pageRequest);
+	// 물품 카테고리 조회
+	@Transactional(readOnly = true)
+	public List<ProductResponse> findCategoryProducts(Category category, Pageable pageable) {
+		Page<Product> products = productRepository.findByCategory(category, pageable);
+		return products.stream()
+				.map(ProductResponse::new)
+				.collect(Collectors.toList());
 	}
 }
