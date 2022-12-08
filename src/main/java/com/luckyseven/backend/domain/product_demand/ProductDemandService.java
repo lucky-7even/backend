@@ -76,7 +76,7 @@ public class ProductDemandService {
             ProductDemandLikes productDemandLikes = productDemandLikesRepository.findByProductDemand_ProductDemandId(productDemandId);
             if (productDemandLikes.isLike()) {
                 productDemandLikes.cancelLike();
-            } else if (!productDemandLikes.isLike()) {
+            } else {
                 productDemandLikes.setLike();
             }
         }

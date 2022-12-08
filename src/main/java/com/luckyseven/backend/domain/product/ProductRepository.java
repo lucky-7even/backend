@@ -1,7 +1,5 @@
 package com.luckyseven.backend.domain.product;
 
-import java.util.List;
-
 import com.luckyseven.backend.domain.product.entity.Product;
 import com.luckyseven.backend.domain.product.model.Category;
 import org.springframework.data.domain.Page;

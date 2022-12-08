@@ -75,6 +75,8 @@ public class SecurityConfig {
                 .antMatchers("/swagger-resources/**").anonymous()
                 .antMatchers("/v2/**").anonymous()
                 .antMatchers("/csrf").anonymous()
+                .antMatchers("/api/**").anonymous()
+
 
 
                 // 여기서부터 uri 권한 설정
