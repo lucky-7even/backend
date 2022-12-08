@@ -37,15 +37,15 @@ public class ProductController {
 	@GetMapping
 	@ApiOperation(value = "물품 전체 리스트 조회, 물품 검색 리스트 조회, 카테고리 클릭 시 리스트 조회")
 	public ResponseEntity<CommonApiResponse<List<ProductResponse>>> products(
-		@RequestParam int page,
+		@RequestParam Long productId,
 		@RequestParam int size,
 		@RequestParam(required = false) String name,
 		@RequestParam(required = false) Category category){
-		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+		Pageable pageable = PageRequest.of(0, size, Sort.by("createdAt").descending());
 
-		if (category != null) return ResponseEntity.ok(CommonApiResponse.of(productService.findCategoryProducts(category, pageable)));
-		else if (name != null) return ResponseEntity.ok(CommonApiResponse.of(productService.searchProducts(name, pageable)));
-		return ResponseEntity.ok(CommonApiResponse.of(productService.findProducts(pageable)));
+		if (category != null) return ResponseEntity.ok(CommonApiResponse.of(productService.findCategoryProducts(productId, category, pageable)));
+		else if (name != null) return ResponseEntity.ok(CommonApiResponse.of(productService.searchProducts(productId, name, pageable)));
+		return ResponseEntity.ok(CommonApiResponse.of(productService.findProducts(productId, pageable)));
 	}
 
 	@PostMapping

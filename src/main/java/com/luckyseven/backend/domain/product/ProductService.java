@@ -56,8 +56,8 @@ public class ProductService {
 
 	// 물품 전체 조회
 	@Transactional(readOnly = true)
-	public List<ProductResponse> findProducts(Pageable pageable) {
-		Page<Product> products = productRepository.findAll(pageable);
+	public List<ProductResponse> findProducts(Long productId, Pageable pageable) {
+		Page<Product> products = productRepository.findByProductIdLessThanOrderByProductIdDesc(productId, pageable);
 		return products.stream()
 				.map(ProductResponse::new)
 				.collect(Collectors.toList());
@@ -65,8 +65,8 @@ public class ProductService {
 
 	// 물품 검색
 	@Transactional(readOnly = true)
-	public List<ProductResponse> searchProducts(String name, Pageable pageable) {
-		Page<Product> products = productRepository.findByNameContaining(name, pageable);
+	public List<ProductResponse> searchProducts(Long productId, String name, Pageable pageable) {
+		Page<Product> products = productRepository.findByProductIdLessThanAndNameContainsOrderByProductIdDesc(productId, name, pageable);
 		return products.stream()
 				.map(ProductResponse::new)
 				.collect(Collectors.toList());
@@ -74,8 +74,8 @@ public class ProductService {
 
 	// 물품 카테고리 조회
 	@Transactional(readOnly = true)
-	public List<ProductResponse> findCategoryProducts(Category category, Pageable pageable) {
-		Page<Product> products = productRepository.findByCategory(category, pageable);
+	public List<ProductResponse> findCategoryProducts(Long productId, Category category, Pageable pageable) {
+		Page<Product> products = productRepository.findByProductIdLessThanAndCategoryOrderByProductIdDesc(productId, category, pageable);
 		return products.stream()
 				.map(ProductResponse::new)
 				.collect(Collectors.toList());
