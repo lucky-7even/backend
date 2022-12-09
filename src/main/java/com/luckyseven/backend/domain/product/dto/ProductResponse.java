@@ -3,12 +3,17 @@ package com.luckyseven.backend.domain.product.dto;
 import static org.springframework.beans.BeanUtils.*;
 
 import com.luckyseven.backend.domain.product.entity.Product;
+import com.luckyseven.backend.domain.product.entity.ProductLikes;
+import com.luckyseven.backend.domain.product.entity.ProductReply;
 import com.luckyseven.backend.domain.product.model.Category;
 import com.luckyseven.backend.domain.product.model.ProductStatus;
 import com.luckyseven.backend.domain.product.model.Region;
+import com.luckyseven.backend.domain.product.repository.ProductLikesRepository;
+import com.luckyseven.backend.domain.product.repository.ProductReplyRepository;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +54,9 @@ public class ProductResponse {
 	@ApiModelProperty(value = "물품 찜 수", required = true)
 	private Long likes;
 
+	@ApiModelProperty(value = "댓글 수", required = true)
+	private Long replies;
+
 	@ApiModelProperty(value = "물품 댓글", required = true)
 	private List<ProductReplyResponseDto> productReplyResponseDtoList;
 
@@ -68,8 +76,15 @@ public class ProductResponse {
 				.productRegistrant(product.getMember().getNickname())
 				.productImages(product.getImages())
 				.productReplyResponseDtoList(product.getProductReplyList().stream()
+						.sorted(Comparator.comparing(ProductReply::getCreatedAt).reversed())
 						.map(ProductReplyResponseDto::of)
 						.collect(Collectors.toList()))
+				.likes(product.getProductLikesList().stream()
+						.filter(a -> a.getProduct().getProductId().equals(product.getProductId()) && a.isLike())
+						.count())
+				.replies(product.getProductReplyList().stream()
+						.filter(b -> b.getProduct().getProductId().equals(product.getProductId()))
+						.count())
 				.build();
 	}
 }

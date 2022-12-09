@@ -2,6 +2,7 @@ package com.luckyseven.backend.domain.product;
 
 import static com.luckyseven.backend.global.error.ErrorCode.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import com.luckyseven.backend.domain.product.entity.ProductLikes;
 import com.luckyseven.backend.domain.product.entity.ProductReply;
 import com.luckyseven.backend.domain.product.model.Category;
 import com.luckyseven.backend.domain.product.model.ProductStatus;
+import com.luckyseven.backend.domain.product.model.SearchCondition;
 import com.luckyseven.backend.domain.product.repository.ProductLikesRepository;
 import com.luckyseven.backend.domain.product.repository.ProductReplyRepository;
 import com.luckyseven.backend.domain.product.repository.ProductRepository;
@@ -23,7 +25,9 @@ import com.luckyseven.backend.global.config.s3.AwsS3ServiceImpl;
 import com.luckyseven.backend.global.error.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,35 +73,41 @@ public class ProductService {
 
 	// 물품 전체 조회
 	@Transactional(readOnly = true)
-	public List<ProductResponse> findProducts(Long productId, Pageable pageable) {
+	public List<ProductResponse> findProducts(Long productId, int size) {
+		Pageable pageable = PageRequest.of(0, size, Sort.by("createdAt").descending());
 		Page<Product> products = productRepository.findByProductIdLessThanOrderByProductIdDesc(productId, pageable);
-		List<ProductResponse> productResponses = products.stream()
+		return products.stream()
 				.map(ProductResponse::of)
 				.collect(Collectors.toList());
-		productResponses.forEach(likes -> likes.setLikes(productLikesRepository.countByProduct_ProductIdAndIsLikeTrue(likes.getProductId())));
-		return productResponses;
 	}
 
 	// 물품 검색
 	@Transactional(readOnly = true)
-	public List<ProductResponse> searchProducts(Long productId, String name, Pageable pageable) {
+	public List<ProductResponse> searchProducts(Long productId, String name, SearchCondition search, int size) {
+		Pageable pageable = PageRequest.of(0, size);
 		Page<Product> products = productRepository.findByProductIdLessThanAndNameContainsOrderByProductIdDesc(productId, name, pageable);
 		List<ProductResponse> searchProducts = products
 				.stream()
 				.map(ProductResponse::of)
 				.collect(Collectors.toList());
-		searchProducts.forEach(likes -> likes.setLikes(productLikesRepository.countByProduct_ProductIdAndIsLikeTrue(likes.getProductId())));
+
+		if (search != null) searchProducts = conditionProducts(products, search);
+
 		return searchProducts;
 	}
 
 	// 물품 카테고리 조회
 	@Transactional(readOnly = true)
-	public List<ProductResponse> findCategoryProducts(Long productId, Category category, Pageable pageable) {
+	public List<ProductResponse> findCategoryProducts(Long productId, Category category, SearchCondition search, int size) {
+		Pageable pageable = PageRequest.of(0, size);
 		Page<Product> products = productRepository.findByProductIdLessThanAndCategoryOrderByProductIdDesc(productId, category, pageable);
+
 		List<ProductResponse> productCategories = products.stream()
 				.map(ProductResponse::of)
 				.collect(Collectors.toList());
-		productCategories.forEach(likes -> likes.setLikes(productLikesRepository.countByProduct_ProductIdAndIsLikeTrue(likes.getProductId())));
+
+		if (search != null) productCategories = conditionProducts(products, search);
+
 		return productCategories;
 	}
 
@@ -136,5 +146,31 @@ public class ProductService {
 		productReplyRepository.save(productReply);
 
 		return ProductReplyResponseDto.of(productReply);
+	}
+
+	public List<ProductResponse> conditionProducts(Page<Product> products, SearchCondition condition) {
+		List<ProductResponse> productResponses;
+		if (condition.equals(SearchCondition.RV)) {
+			productResponses = products.stream()
+					.map(ProductResponse::of)
+					.sorted(Comparator.comparing(ProductResponse::getReplies).reversed())
+					.collect(Collectors.toList());
+		} else if (condition.equals(SearchCondition.LK)) {
+			productResponses = products.stream()
+					.map(ProductResponse::of)
+					.sorted(Comparator.comparing(ProductResponse::getLikes).reversed())
+					.collect(Collectors.toList());
+		} else if (condition.equals(SearchCondition.HP)) {
+			productResponses = products.stream()
+					.map(ProductResponse::of)
+					.sorted(Comparator.comparing(ProductResponse::getPrice).reversed())
+					.collect(Collectors.toList());
+		} else {
+			productResponses = products.stream()
+					.map(ProductResponse::of)
+					.sorted(Comparator.comparing(ProductResponse::getPrice))
+					.collect(Collectors.toList());
+		}
+		return productResponses;
 	}
 }

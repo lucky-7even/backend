@@ -11,6 +11,4 @@ public interface ProductLikesRepository extends JpaRepository<ProductLikes, Long
             "join fetch p.product " +
             "where p.product.productId = :productId")
     ProductLikes findByProduct_ProductId(Long productId);
-
-    Long countByProduct_ProductIdAndIsLikeTrue(Long productId);
 }

@@ -7,6 +7,7 @@ import com.luckyseven.backend.domain.product.dto.ProductReplyResponseDto;
 import com.luckyseven.backend.domain.product.dto.ProductRequest;
 import com.luckyseven.backend.domain.product.dto.ProductResponse;
 import com.luckyseven.backend.domain.product.model.Category;
+import com.luckyseven.backend.domain.product.model.SearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,12 +44,12 @@ public class ProductController {
 		@RequestParam Long productId,
 		@RequestParam int size,
 		@RequestParam(required = false) String name,
-		@RequestParam(required = false) Category category){
-		Pageable pageable = PageRequest.of(0, size, Sort.by("createdAt").descending());
+		@RequestParam(required = false) Category category,
+		@RequestParam(required = false) SearchCondition search){
 
-		if (category != null) return ResponseEntity.ok(CommonApiResponse.of(productService.findCategoryProducts(productId, category, pageable)));
-		else if (name != null) return ResponseEntity.ok(CommonApiResponse.of(productService.searchProducts(productId, name, pageable)));
-		return ResponseEntity.ok(CommonApiResponse.of(productService.findProducts(productId, pageable)));
+		if (category != null) return ResponseEntity.ok(CommonApiResponse.of(productService.findCategoryProducts(productId, category, search, size)));
+		else if (name != null) return ResponseEntity.ok(CommonApiResponse.of(productService.searchProducts(productId, name, search, size)));
+		return ResponseEntity.ok(CommonApiResponse.of(productService.findProducts(productId, size)));
 	}
 
 	@PostMapping(consumes = {
