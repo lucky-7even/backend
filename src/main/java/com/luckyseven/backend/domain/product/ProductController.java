@@ -2,6 +2,8 @@ package com.luckyseven.backend.domain.product;
 
 import java.util.List;
 
+import com.luckyseven.backend.domain.product.dto.ProductReplyRequestDto;
+import com.luckyseven.backend.domain.product.dto.ProductReplyResponseDto;
 import com.luckyseven.backend.domain.product.dto.ProductRequest;
 import com.luckyseven.backend.domain.product.dto.ProductResponse;
 import com.luckyseven.backend.domain.product.model.Category;
@@ -66,5 +68,23 @@ public class ProductController {
 	public ResponseEntity<CommonApiResponse<ProductResponse>> findProduct(
 			@PathVariable Long productId) {
 		return ResponseEntity.ok(CommonApiResponse.of(productService.findProduct(productId)));
+	}
+	
+	@PostMapping("{productId}")
+	@ApiOperation(value = "물품 찜")
+	public ResponseEntity<String> likeProduct(
+			@ApiIgnore Authentication authentication,
+			@PathVariable Long productId) {
+		productService.likeProduct(authentication.getName(), productId);
+		return ResponseEntity.ok(productId + "번 물품의 찜 및 찜 취소 처리가 완료되었습니다.");
+	}
+	
+	@PostMapping("{productId}/replies")
+	@ApiOperation(value = "물품 댓글")
+	public ResponseEntity<CommonApiResponse<ProductReplyResponseDto>> makeProductReply(
+			@ApiIgnore Authentication authentication,
+			@PathVariable Long productId,
+			@RequestBody ProductReplyRequestDto productReplyRequestDto) {
+		return ResponseEntity.ok(CommonApiResponse.of(productService.makeProductReply(authentication.getName(), productId, productReplyRequestDto)));
 	}
 }

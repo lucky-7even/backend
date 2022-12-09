@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.luckyseven.backend.domain.product.entity.ProductLikes;
 import com.luckyseven.backend.domain.product_demand.entity.ProductDemand;
 import com.luckyseven.backend.domain.product_demand.entity.ProductDemandLikes;
 import lombok.AllArgsConstructor;
@@ -44,4 +45,7 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<ProductDemandLikes> productDemandLikesList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<ProductLikes> productLikesList;
 }

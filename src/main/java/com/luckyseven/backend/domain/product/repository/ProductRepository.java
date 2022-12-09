@@ -1,4 +1,4 @@
-package com.luckyseven.backend.domain.product;
+package com.luckyseven.backend.domain.product.repository;
 
 import com.luckyseven.backend.domain.product.entity.Product;
 import com.luckyseven.backend.domain.product.model.Category;

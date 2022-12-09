@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -45,6 +46,12 @@ public class ProductResponse {
 	@ApiModelProperty(value = "물건 이미지들", required = true)
 	private List<String> productImages;
 
+	@ApiModelProperty(value = "물품 찜 수", required = true)
+	private Long likes;
+
+	@ApiModelProperty(value = "물품 댓글", required = true)
+	private List<ProductReplyResponseDto> productReplyResponseDtoList;
+
 	public ProductResponse(Product source) {
 		copyProperties(source, this);
 	}
@@ -60,6 +67,9 @@ public class ProductResponse {
 				.region(product.getRegion())
 				.productRegistrant(product.getMember().getNickname())
 				.productImages(product.getImages())
+				.productReplyResponseDtoList(product.getProductReplyList().stream()
+						.map(ProductReplyResponseDto::of)
+						.collect(Collectors.toList()))
 				.build();
 	}
 }
