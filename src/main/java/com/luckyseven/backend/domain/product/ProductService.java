@@ -12,26 +12,29 @@ import com.luckyseven.backend.domain.product.dto.ProductResponse;
 import com.luckyseven.backend.domain.product.entity.Product;
 import com.luckyseven.backend.domain.product.model.Category;
 import com.luckyseven.backend.domain.product.model.ProductStatus;
+import com.luckyseven.backend.global.config.s3.AwsS3ServiceImpl;
 import com.luckyseven.backend.global.error.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 	private final ProductRepository productRepository;
 	private final MemberRepository memberRepository;
+	private final AwsS3ServiceImpl awsS3Service;
 
 	// 물품 등록
 	@Transactional
-	public ProductResponse makeProduct(String email, ProductRequest productRequest) {
+	public ProductResponse makeProduct(String email, ProductRequest productRequest, List<MultipartFile> multipartFiles) {
 		Member member = memberRepository.findByEmail(email)
 				.orElseThrow(() -> new BadRequestException(MEMBER_NOT_FOUND));
+
+		List<String> productImages = awsS3Service.uploadImage(multipartFiles, "product");
 
 		Product product = Product.builder()
 				.category(productRequest.getCategory())
@@ -40,6 +43,7 @@ public class ProductService {
 				.description(productRequest.getDescription())
 				.productStatus(ProductStatus.WAITING)
 				.member(member)
+				.images(productImages)
 				.build();
 		productRepository.save(product);
 

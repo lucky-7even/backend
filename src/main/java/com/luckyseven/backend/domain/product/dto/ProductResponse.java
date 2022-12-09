@@ -9,6 +9,8 @@ import com.luckyseven.backend.domain.product.model.Region;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -40,6 +42,9 @@ public class ProductResponse {
 	@ApiModelProperty(value = "물건 등록한 사람", required = true)
 	private String productRegistrant;
 
+	@ApiModelProperty(value = "물건 이미지들", required = true)
+	private List<String> productImages;
+
 	public ProductResponse(Product source) {
 		copyProperties(source, this);
 	}
@@ -54,6 +59,7 @@ public class ProductResponse {
 				.productStatus(product.getProductStatus())
 				.region(product.getRegion())
 				.productRegistrant(product.getMember().getNickname())
+				.productImages(product.getImages())
 				.build();
 	}
 }

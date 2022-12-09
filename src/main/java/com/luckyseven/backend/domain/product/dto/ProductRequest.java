@@ -18,7 +18,7 @@ public class ProductRequest {
 	@NotNull
 	private String name;
 
-	@ApiModelProperty(value = "등록물품이름", example = "축구공")
+	@ApiModelProperty(value = "카테고리", example = "SPORTS")
 	@NotNull
 	private Category category;
 
@@ -29,6 +29,4 @@ public class ProductRequest {
 	@ApiModelProperty(value = "설명", example = "실제 손흥민이 찼던 공입니다!!")
 	@NotNull
 	private String description;
-
-	// private String imageS3URL;
 }

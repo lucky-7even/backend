@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +25,7 @@ import com.luckyseven.backend.global.config.CommonApiResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
@@ -48,13 +49,16 @@ public class ProductController {
 		return ResponseEntity.ok(CommonApiResponse.of(productService.findProducts(productId, pageable)));
 	}
 
-	@PostMapping
+	@PostMapping(consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ApiOperation(value = "물품 등록")
 	public ResponseEntity<CommonApiResponse<ProductResponse>> makeProduct(
 		@ApiParam(value = "example: {\"address\": \"test@naver.com\"}")
 		@ApiIgnore Authentication authentication,
-		@Valid @RequestBody ProductRequest productRequest) {
-		return ResponseEntity.ok(CommonApiResponse.of(productService.makeProduct(authentication.getName(), productRequest)));
+		@Valid @RequestPart ProductRequest productRequest,
+		@RequestPart(required = false) List<MultipartFile> multipartFiles) {
+		return ResponseEntity.ok(CommonApiResponse.of(productService.makeProduct(authentication.getName(), productRequest, multipartFiles)));
 	}
 
 	@GetMapping("{productId}")
