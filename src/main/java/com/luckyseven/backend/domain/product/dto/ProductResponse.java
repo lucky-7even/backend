@@ -80,10 +80,10 @@ public class ProductResponse {
 						.map(ProductReplyResponseDto::of)
 						.collect(Collectors.toList()))
 				.likes(product.getProductLikesList().stream()
-						.filter(a -> a.getProduct().getProductId().equals(product.getProductId()) && a.isLike())
+						.filter(likes -> likes.getProduct().getProductId().equals(product.getProductId()) && likes.isLike())
 						.count())
 				.replies(product.getProductReplyList().stream()
-						.filter(b -> b.getProduct().getProductId().equals(product.getProductId()))
+						.filter(replies -> replies.getProduct().getProductId().equals(product.getProductId()))
 						.count())
 				.build();
 	}
