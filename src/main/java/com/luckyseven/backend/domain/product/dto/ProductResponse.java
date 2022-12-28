@@ -19,9 +19,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductResponse {
 
 	@ApiModelProperty(value = "PK", required = true)
@@ -62,6 +60,25 @@ public class ProductResponse {
 
 	public ProductResponse(Product source) {
 		copyProperties(source, this);
+	}
+
+	@Builder
+	public ProductResponse(Long productId, Category category, String name, int price,
+						   String description, ProductStatus productStatus, Region region,
+						   String productRegistrant, List<String> productImages, List<ProductReplyResponseDto> productReplyResponseDtoList,
+						   Long likes, Long replies) {
+		this.productId = productId;
+		this.category = category;
+		this.name = name;
+		this.price = price;
+		this.description = description;
+		this.productStatus = productStatus;
+		this.region = region;
+		this.productRegistrant = productRegistrant;
+		this.productImages = productImages;
+		this.productReplyResponseDtoList = productReplyResponseDtoList;
+		this.likes = likes;
+		this.replies = replies;
 	}
 
 	public static ProductResponse of(Product product) {

@@ -11,18 +11,12 @@ import com.luckyseven.backend.domain.product.model.Category;
 import com.luckyseven.backend.domain.product.model.ProductStatus;
 import com.luckyseven.backend.domain.product.model.Region;
 import com.luckyseven.backend.global.config.entity.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseTimeEntity {
-
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long productId;
 
@@ -53,4 +47,22 @@ public class Product extends BaseTimeEntity {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	private List<ProductReply> productReplyList;
+
+	@Builder
+	public Product(Long productId, Category category, String name,
+				   int price, String description, Region region,
+				   ProductStatus productStatus, List<String> images, Member member,
+				   List<ProductLikes> productLikesList, List<ProductReply> productReplyList) {
+		this.productId = productId;
+		this.category = category;
+		this.name = name;
+		this.price = price;
+		this.description = description;
+		this.region = region;
+		this.productStatus = productStatus;
+		this.images = images;
+		this.member = member;
+		this.productLikesList = productLikesList;
+		this.productReplyList = productReplyList;
+	}
 }
