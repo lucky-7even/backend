@@ -1,9 +1,8 @@
-package com.luckyseven.backend.global.config.security.oauth.dto;
+package com.luckyseven.backend.global.config.security.dto;
 
 import java.util.Map;
 
 public class KakaoUserInfo {
-
     private Map<String, Object> attributes;
 
     public KakaoUserInfo(Map<String, Object> attributes) {
